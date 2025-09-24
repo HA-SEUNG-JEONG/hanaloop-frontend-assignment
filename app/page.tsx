@@ -3,14 +3,14 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { fetchCountries, fetchCompanies, fetchPosts } from "./lib/api";
 import { Country, Company, Post } from "./types";
-import { DashboardHeader } from "./dashboard/DashboardHeader";
+import { DashboardHeader } from "./dashboard/components/DashboardHeader";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { ErrorState } from "@/components/common/ErrorState";
-import { StatsGrid } from "./dashboard/StatsGrid";
-import { TopEmittingCountries } from "./dashboard/TopEmittingCountries";
-import { RegionStats } from "./dashboard/RegionStats";
-import { RecentReports } from "./dashboard/RecentReports";
-import { ActionButtons } from "./dashboard/ActionButtons";
+import { StatsGrid } from "./dashboard/components/StatsGrid";
+import { TopEmittingCountries } from "./dashboard/components/TopEmittingCountries";
+import { RegionStats } from "./dashboard/components/RegionStats";
+import { RecentReports } from "./dashboard/components/RecentReports";
+import { ActionButtons } from "./dashboard/components/ActionButtons";
 
 interface DashboardData {
   countries: Country[];
