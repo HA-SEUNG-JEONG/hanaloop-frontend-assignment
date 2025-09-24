@@ -19,9 +19,9 @@ import { fetchCountries } from "../lib/api";
 import { Country } from "../types";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { ErrorState } from "@/components/common/ErrorState";
-import { PageHeader } from "./components/PageHeader";
-import { StatsCards } from "./components/StatsCards";
-import { ChartsSection } from "./components/ChartsSection";
+import { AnalyticsPageHeader } from "./components/AnalyticsPageHeader";
+import { AnalyticsStatsCards } from "./components/AnalyticsStatsCards";
+import { AnalyticsChartsSection } from "./components/AnalyticsChartsSection";
 import { CountriesTable } from "./components/CountriesTable";
 
 export default function AnalyticsPage() {
@@ -107,10 +107,10 @@ export default function AnalyticsPage() {
 
   return (
     <div className="min-h-screen bg-background pt-20">
-      <PageHeader />
+      <AnalyticsPageHeader />
       <div className="container mx-auto px-4 py-8 space-y-8">
-        <StatsCards {...statsData} />
-        <ChartsSection {...chartData} />
+        <AnalyticsStatsCards {...statsData} />
+        <AnalyticsChartsSection {...chartData} />
         <CountriesTable countries={countries} />
       </div>
     </div>
