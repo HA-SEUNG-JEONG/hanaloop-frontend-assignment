@@ -71,6 +71,67 @@ const sampleNotifications: Notification[] = [
 
 let _notifications = [...sampleNotifications];
 
+// 샘플 사용자 데이터
+const sampleUsers: User[] = [
+  {
+    id: "u1",
+    name: "김철수",
+    email: "kim@example.com",
+    role: "관리자",
+    company: "Acme Corp",
+    country: "KR",
+    status: "활성",
+    lastLogin: "2024-01-15",
+    joinDate: "2023-06-01"
+  },
+  {
+    id: "u2",
+    name: "이영희",
+    email: "lee@example.com",
+    role: "사용자",
+    company: "Globex",
+    country: "DE",
+    status: "활성",
+    lastLogin: "2024-01-14",
+    joinDate: "2023-08-15"
+  },
+  {
+    id: "u3",
+    name: "John Smith",
+    email: "john@example.com",
+    role: "사용자",
+    company: "Acme Corp",
+    country: "US",
+    status: "비활성",
+    lastLogin: "2024-01-10",
+    joinDate: "2023-09-20"
+  },
+  {
+    id: "u4",
+    name: "Maria Garcia",
+    email: "maria@example.com",
+    role: "감사자",
+    company: "Globex",
+    country: "ES",
+    status: "활성",
+    lastLogin: "2024-01-15",
+    joinDate: "2023-11-05"
+  },
+  {
+    id: "u5",
+    name: "田中太郎",
+    email: "tanaka@example.com",
+    role: "사용자",
+    company: "TechCorp",
+    country: "JP",
+    status: "활성",
+    lastLogin: "2024-01-13",
+    joinDate: "2023-12-01"
+  }
+];
+
+let _users = [...sampleUsers];
+
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 const jitter = () => 200 + Math.random() * 600;
 const maybeFail = () => Math.random() < 0.15;

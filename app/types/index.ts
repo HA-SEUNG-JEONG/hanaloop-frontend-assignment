@@ -66,3 +66,33 @@ export type Notification = {
 };
 
 export type NotificationFilter = "all" | "unread" | "read";
+
+// 사용자 관련 타입
+export type UserRole = "관리자" | "감사자" | "사용자";
+export type UserStatus = "활성" | "비활성";
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  company: string;
+  country: string;
+  status: UserStatus;
+  lastLogin: string;
+  joinDate: string;
+};
+
+export type UserStats = {
+  totalUsers: number;
+  activeUsers: number;
+  adminUsers: number;
+  recentUsers: number;
+};
+
+export type UserFilter = {
+  search: string;
+  role: UserRole | "all";
+  status: UserStatus | "all";
+  country: string | "all";
+};
