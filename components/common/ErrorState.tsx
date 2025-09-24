@@ -1,3 +1,12 @@
+/**
+ * 전역 에러 상태 컴포넌트
+ *
+ * 디자인 의사결정:
+ * - 일관된 에러 UI 패턴
+ * - 유연한 메시지와 액션 커스터마이징
+ * - 접근성 고려
+ */
+
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
