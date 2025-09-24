@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { X, Home, BarChart3, Users, FileText, Bell } from "lucide-react";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 interface NavigationDrawerProps {
   isOpen: boolean;
@@ -55,22 +56,25 @@ export default function NavigationDrawer({
 
       {/* Drawer */}
       <div
-        className={`fixed top-0 left-0 h-full w-80 bg-white dark:bg-gray-900 shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-80 bg-background border-r border-border shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+        <div className="flex items-center justify-between p-6 border-b border-border">
+          <h2 className="text-xl font-semibold text-foreground">
             메뉴
           </h2>
-          <button
-            onClick={handleClose}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            aria-label="메뉴 닫기"
-          >
-            <X className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={handleClose}
+              className="p-2 rounded-lg hover:bg-accent transition-colors"
+              aria-label="메뉴 닫기"
+            >
+              <X className="w-5 h-5 text-muted-foreground" />
+            </button>
+          </div>
         </div>
 
         {/* Navigation Items */}
@@ -82,10 +86,10 @@ export default function NavigationDrawer({
                 <li key={item.id}>
                   <Link
                     href={item.href}
-                    className="flex items-center px-4 py-3 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors group"
+                    className="flex items-center px-4 py-3 text-foreground rounded-lg hover:bg-accent transition-colors group"
                     onClick={handleClose}
                   >
-                    <Icon className="w-5 h-5 mr-3 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                    <Icon className="w-5 h-5 mr-3 text-muted-foreground group-hover:text-primary transition-colors" />
                     <span className="font-medium">{item.label}</span>
                   </Link>
                 </li>
@@ -95,16 +99,16 @@ export default function NavigationDrawer({
         </nav>
 
         {/* Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-border">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
               <span className="text-white text-sm font-semibold">H</span>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
+              <p className="text-sm font-medium text-foreground">
                 HanaLoop
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <p className="text-xs text-muted-foreground">
                 Frontend Assignment
               </p>
             </div>

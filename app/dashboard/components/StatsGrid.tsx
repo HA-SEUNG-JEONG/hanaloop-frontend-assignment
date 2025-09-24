@@ -1,6 +1,6 @@
 import { StatsCards, StatCardData } from "@/components/common/StatsCards";
 import { Globe, TrendingUp, Building2, FileText } from "lucide-react";
-import { Country, Company, Post } from "../types";
+import { Country, Company, Post } from "../../types";
 
 interface StatsGridProps {
   countries: Country[];

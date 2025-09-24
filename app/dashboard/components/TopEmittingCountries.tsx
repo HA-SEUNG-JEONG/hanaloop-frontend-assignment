@@ -6,7 +6,7 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Country } from "../types";
+import { Country } from "../../types";
 
 interface TopEmittingCountriesProps {
   countries: Country[];

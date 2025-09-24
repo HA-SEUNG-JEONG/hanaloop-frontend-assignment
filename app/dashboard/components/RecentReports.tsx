@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText } from "lucide-react";
-import { Post, Company } from "../types";
+import { Post, Company } from "../../types";
 
 interface RecentReportsProps {
   posts: Post[];

@@ -6,7 +6,7 @@ export function ActionButtons() {
   return (
     <div className="flex flex-col sm:flex-row gap-4 justify-center">
       <Link href="/analytics">
-        <Button size="lg" className="w-full sm:w-auto">
+        <Button variant="outline" size="lg" className="w-full sm:w-auto">
           <BarChart3 className="mr-2 h-4 w-4" />
           상세 분석 보기
         </Button>
