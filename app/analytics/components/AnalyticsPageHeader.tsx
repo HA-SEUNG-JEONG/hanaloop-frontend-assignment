@@ -1,6 +1,6 @@
 /**
  * Analytics 페이지용 헤더 컴포넌트
- *
+ * 
  * 공통 PageHeader 컴포넌트를 사용하여 Analytics 특화 설정을 적용
  */
 

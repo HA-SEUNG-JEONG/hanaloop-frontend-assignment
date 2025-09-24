@@ -39,16 +39,16 @@ export function CountriesTable({ countries }: CountriesTableProps) {
         <CardDescription>모든 국가의 상세 배출량 정보</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="rounded-md border">
+        <div className="rounded-md border overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>국가</TableHead>
-                <TableHead>지역</TableHead>
-                <TableHead>인구</TableHead>
-                <TableHead>GDP</TableHead>
-                <TableHead>배출량</TableHead>
-                <TableHead>1인당 배출량</TableHead>
+                <TableHead className="min-w-[120px]">국가</TableHead>
+                <TableHead className="min-w-[80px]">지역</TableHead>
+                <TableHead className="min-w-[80px]">인구</TableHead>
+                <TableHead className="min-w-[80px]">GDP</TableHead>
+                <TableHead className="min-w-[100px]">배출량</TableHead>
+                <TableHead className="min-w-[100px]">1인당 배출량</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -59,24 +59,32 @@ export function CountriesTable({ countries }: CountriesTableProps) {
                 return (
                   <TableRow key={country.id}>
                     <TableCell className="font-medium">
-                      <div className="flex items-center space-x-2">
-                        <span>{country.name}</span>
-                        <Badge variant="outline" className="text-xs">
+                      <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2">
+                        <span className="text-sm sm:text-base">
+                          {country.name}
+                        </span>
+                        <Badge variant="outline" className="text-xs w-fit">
                           {country.code}
                         </Badge>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary">{country.region}</Badge>
+                      <Badge variant="secondary" className="text-xs sm:text-sm">
+                        {country.region}
+                      </Badge>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-sm sm:text-base">
                       {(country.population / 1000000).toFixed(1)}M
                     </TableCell>
-                    <TableCell>${country.gdp.toFixed(0)}B</TableCell>
-                    <TableCell className="font-medium">
+                    <TableCell className="text-sm sm:text-base">
+                      ${country.gdp.toFixed(0)}B
+                    </TableCell>
+                    <TableCell className="font-medium text-sm sm:text-base">
                       {country.emissions.toFixed(0)}M 톤
                     </TableCell>
-                    <TableCell>{emissionsPerCapita.toFixed(1)} 톤</TableCell>
+                    <TableCell className="text-sm sm:text-base">
+                      {emissionsPerCapita.toFixed(1)} 톤
+                    </TableCell>
                   </TableRow>
                 );
               })}

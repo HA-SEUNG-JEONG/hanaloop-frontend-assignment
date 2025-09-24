@@ -5,8 +5,14 @@
  * - 막대 차트와 파이 차트를 나란히 배치
  * - 반응형 레이아웃으로 모바일에서는 세로 배치
  * - 일관된 색상 팔레트 사용
+ *
+ * 아키텍처 개요:
+ * - CSS 변수와 미디어 쿼리로 반응형 처리
+ * - Tailwind CSS 활용으로 일관된 디자인 시스템
+ * - JavaScript 로직 최소화로 성능 최적화
  */
 
+import React from "react";
 import {
   Card,
   CardContent,
@@ -43,7 +49,8 @@ interface ChartsSectionProps {
   }>;
 }
 
-const COLORS = [
+// 차트 색상 팔레트
+const CHART_COLORS = [
   "#0088FE",
   "#00C49F",
   "#FFBB28",
@@ -52,12 +59,26 @@ const COLORS = [
   "#82CA9D"
 ];
 
-export function ChartsSection({
+// 파이 차트 라벨 데이터 타입
+interface PieChartLabelData {
+  name: string;
+  percent: number;
+  value: number;
+}
+
+// 파이 차트 라벨 포맷팅 함수
+const formatPieChartLabel = (entry: PieChartLabelData): string => {
+  const { name, percent } = entry;
+  const percentage = `${(percent * 100).toFixed(0)}%`;
+  return `${name} ${percentage}`;
+};
+
+export function AnalyticsChartsSection({
   barChartData,
   pieChartData
 }: ChartsSectionProps) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
       {/* 상위 10개국 배출량 막대 차트 */}
       <Card>
         <CardHeader>
@@ -71,7 +92,7 @@ export function ChartsSection({
                 label: "배출량 (백만 톤)"
               }
             }}
-            className="h-[400px]"
+            className="h-[300px] sm:h-[350px] lg:h-[400px] w-full"
           >
             <BarChart data={barChartData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -79,10 +100,11 @@ export function ChartsSection({
                 dataKey="name"
                 angle={-45}
                 textAnchor="end"
-                height={100}
-                fontSize={12}
+                height={80}
+                fontSize={14}
+                className="text-sm sm:text-base"
               />
-              <YAxis />
+              <YAxis fontSize={14} className="text-sm sm:text-base" />
               <ChartTooltip content={<ChartTooltipContent />} />
               <Bar dataKey="emissions" fill="#8884d8" />
             </BarChart>
@@ -103,7 +125,7 @@ export function ChartsSection({
                 label: "배출량 (백만 톤)"
               }
             }}
-            className="h-[400px]"
+            className="h-[300px] sm:h-[350px] lg:h-[400px] w-full"
           >
             <PieChart>
               <Pie
@@ -111,17 +133,19 @@ export function ChartsSection({
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) =>
-                  `${name} ${(percent * 100).toFixed(0)}%`
-                }
-                outerRadius={120}
+                label={formatPieChartLabel}
+                outerRadius="var(--pie-outer-radius)"
+                innerRadius="var(--pie-inner-radius)"
                 fill="#8884d8"
                 dataKey="value"
+                style={{
+                  fontSize: "var(--pie-label-size)"
+                }}
               >
                 {pieChartData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
+                    fill={CHART_COLORS[index % CHART_COLORS.length]}
                   />
                 ))}
               </Pie>
