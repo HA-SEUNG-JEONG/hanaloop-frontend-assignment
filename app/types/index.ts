@@ -28,3 +28,41 @@ export type Country = {
   gdp: number; // GDP in billions USD
   emissions: number; // Total CO2 emissions in million tons
 };
+
+export type CompanyEmissionsData = {
+  id: string;
+  name: string;
+  country: string;
+  latestEmissions: number;
+  change: number;
+  emissions: GhgEmission[];
+};
+
+export type TimeSeriesData = {
+  yearMonth: string;
+  totalEmissions: number;
+};
+
+export type ReportsStats = {
+  totalCompanies: number;
+  totalReports: number;
+  avgEmissions: number;
+  companiesWithIncrease: number;
+};
+
+export type NotificationType = "success" | "error" | "warning" | "info";
+export type NotificationPriority = "high" | "medium" | "low";
+export type NotificationCategory = "emission" | "report" | "system" | "company";
+
+export type Notification = {
+  id: number;
+  title: string;
+  message: string;
+  type: NotificationType;
+  isRead: boolean;
+  createdAt: string;
+  priority: NotificationPriority;
+  category: NotificationCategory;
+};
+
+export type NotificationFilter = "all" | "unread" | "read";

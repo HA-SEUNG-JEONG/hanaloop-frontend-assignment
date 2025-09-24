@@ -4,11 +4,11 @@ import { CheckCheck } from "lucide-react";
 
 /**
  * 알림 페이지 헤더 컴포넌트
- * 
+ *
  * 가정:
  * - 읽지 않은 알림이 있을 때만 "모두 읽음" 버튼 표시
  * - 읽지 않은 알림 수는 실시간으로 업데이트됨
- * 
+ *
  * 아키텍처:
  * - Props를 통한 데이터 전달
  * - 콜백 함수를 통한 액션 처리
@@ -18,7 +18,10 @@ interface NotificationHeaderProps {
   onMarkAllAsRead: () => void;
 }
 
-export function NotificationHeader({ unreadCount, onMarkAllAsRead }: NotificationHeaderProps) {
+export function NotificationHeader({
+  unreadCount,
+  onMarkAllAsRead
+}: NotificationHeaderProps) {
   return (
     <div className="border-b bg-card">
       <div className="container mx-auto px-4 py-8">

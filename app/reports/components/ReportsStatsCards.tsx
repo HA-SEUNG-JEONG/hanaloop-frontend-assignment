@@ -1,6 +1,6 @@
 /**
  * Reports 페이지용 통계 카드 컴포넌트
- * 
+ *
  * 공통 StatsCards 컴포넌트를 사용하여 Reports 특화 데이터를 표시
  */
 
