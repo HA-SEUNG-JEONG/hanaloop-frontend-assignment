@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { X, Home, BarChart3, Users, FileText, Bell } from "lucide-react";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 interface NavigationDrawerProps {
   isOpen: boolean;
@@ -62,19 +61,14 @@ export default function NavigationDrawer({
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-border">
-          <h2 className="text-xl font-semibold text-foreground">
-            메뉴
-          </h2>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <button
-              onClick={handleClose}
-              className="p-2 rounded-lg hover:bg-accent transition-colors"
-              aria-label="메뉴 닫기"
-            >
-              <X className="w-5 h-5 text-muted-foreground" />
-            </button>
-          </div>
+          <h2 className="text-xl font-semibold text-foreground">메뉴</h2>
+          <button
+            onClick={handleClose}
+            className="p-2 rounded-lg hover:bg-accent transition-colors"
+            aria-label="메뉴 닫기"
+          >
+            <X className="w-5 h-5 text-muted-foreground" />
+          </button>
         </div>
 
         {/* Navigation Items */}
@@ -105,9 +99,7 @@ export default function NavigationDrawer({
               <span className="text-white text-sm font-semibold">H</span>
             </div>
             <div>
-              <p className="text-sm font-medium text-foreground">
-                HanaLoop
-              </p>
+              <p className="text-sm font-medium text-foreground">HanaLoop</p>
               <p className="text-xs text-muted-foreground">
                 Frontend Assignment
               </p>

@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import NavigationDrawer from "./NavigationDrawer";
 import MenuButton from "./MenuButton";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import ThemeToggle from "@/components/ui/theme-toggle";
 
 interface NavigationContextType {
   isOpen: boolean;
@@ -51,7 +51,7 @@ export default function NavigationProvider({
         <div className="fixed top-4 left-4 z-30">
           <MenuButton onClick={toggleDrawer} />
         </div>
-        
+
         {/* Fixed Theme Toggle Button */}
         <div className="fixed top-4 right-4 z-30">
           <ThemeToggle />
