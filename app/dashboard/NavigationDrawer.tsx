@@ -2,16 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import {
-  X,
-  Menu,
-  Home,
-  BarChart3,
-  Settings,
-  Users,
-  FileText,
-  Bell
-} from "lucide-react";
+import { X, Home, BarChart3, Users, FileText, Bell } from "lucide-react";
 
 interface NavigationDrawerProps {
   isOpen: boolean;
@@ -23,19 +14,15 @@ const navigationItems = [
   { id: "analytics", label: "분석", icon: BarChart3, href: "/analytics" },
   { id: "reports", label: "보고서", icon: FileText, href: "/reports" },
   { id: "users", label: "사용자", icon: Users, href: "/users" },
-  { id: "notifications", label: "알림", icon: Bell, href: "/notifications" },
-  { id: "settings", label: "설정", icon: Settings, href: "/settings" }
+  { id: "notifications", label: "알림", icon: Bell, href: "/notifications" }
 ];
 
 export default function NavigationDrawer({
   isOpen,
   onClose
 }: NavigationDrawerProps) {
-  const [isAnimating, setIsAnimating] = useState(false);
-
   useEffect(() => {
     if (isOpen) {
-      setIsAnimating(true);
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
@@ -47,10 +34,7 @@ export default function NavigationDrawer({
   }, [isOpen]);
 
   const handleClose = () => {
-    setIsAnimating(false);
-    setTimeout(() => {
-      onClose();
-    }, 200);
+    onClose();
   };
 
   const handleOverlayClick = (e: React.MouseEvent) => {
