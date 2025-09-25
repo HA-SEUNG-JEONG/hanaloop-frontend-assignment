@@ -1,13 +1,13 @@
-import { Company } from "../../types";
-import { InfoCard, InfoItem, StatItem } from "./common/InfoCard";
-import { EmissionsBadge } from "./common/EmissionsBadge";
+import { Company } from "@/app/types";
+import { InfoCard, InfoItem, StatItem } from "./InfoCard";
+import { EmissionsBadge } from "./EmissionsBadge";
 import {
   calculateEmissionChange,
   calculateTotalEmployees,
   calculateTotalSubsidiaryEmissions,
   calculateTotalCompanyEmissions,
   calculateAverageOwnership
-} from "../utils/companyUtils";
+} from "@/lib/helpers/companyUtils";
 
 interface CompanyDetailsProps {
   company: Company;

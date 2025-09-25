@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { fetchCompanies, fetchPosts } from "../lib/api";
+import { fetchCompanies, fetchPosts } from "@/lib/api";
 import {
   Company,
   Post,
@@ -9,7 +9,7 @@ import {
   TimeSeriesData,
   ReportsStats
 } from "../types";
-import { ReportsPageHeader } from "./components/ReportsPageHeader";
+import { ReportsPageHeader } from "@/components/common/PageHeader";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { ErrorState } from "@/components/common/ErrorState";
 import {
@@ -22,7 +22,7 @@ import {
 } from "@/components/common/SkeletonComponents";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ReportsStatsCards } from "./components/ReportsStatsCards";
-import { ReportsChartsSection } from "./components/ReportsChartsSection";
+import { ChartsSection } from "./components/ChartsSection";
 import { CompaniesTable } from "./components/CompaniesTable";
 import { ReportsList } from "./components/ReportsList";
 
@@ -163,7 +163,7 @@ export default function ReportsPage() {
 
       <div className="container mx-auto px-4 py-8 space-y-8">
         <ReportsStatsCards stats={stats} />
-        <ReportsChartsSection
+        <ChartsSection
           companyEmissionsData={companyEmissionsData}
           timeSeriesData={timeSeriesData}
         />

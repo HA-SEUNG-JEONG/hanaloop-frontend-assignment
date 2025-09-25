@@ -16,7 +16,7 @@ import {
   TableRow
 } from "@/components/ui/table";
 import { Subsidiary } from "../../types";
-import { sortSubsidiariesByOwnership } from "../utils/companyUtils";
+import { sortSubsidiariesByOwnership } from "@/lib/helpers/companyUtils";
 
 interface SubsidiariesTableProps {
   subsidiaries: Subsidiary[];

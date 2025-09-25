@@ -16,8 +16,8 @@ import {
   TableRow
 } from "@/components/ui/table";
 import { CompanyEmissionsData } from "../../types";
-import { EmissionsBadge } from "./common/EmissionsBadge";
-import { sortCompaniesByEmissions } from "../utils/companyUtils";
+import { sortCompaniesByEmissions } from "@/lib/helpers/companyUtils";
+import { EmissionsBadge } from "./EmissionsBadge";
 
 interface CompaniesTableProps {
   companyEmissionsData: CompanyEmissionsData[];
