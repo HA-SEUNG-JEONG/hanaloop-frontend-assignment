@@ -31,7 +31,7 @@ export function StatsGrid({
   const statsData: StatCardData[] = [
     {
       title: "총 배출량",
-      value: `${totalEmissions.toFixed(0)}M`,
+      value: totalEmissions,
       description: "백만 톤 CO₂",
       icon: Globe,
       trend: {
@@ -39,11 +39,13 @@ export function StatsGrid({
         label: "전년 대비 증가",
         isPositive: false
       },
-      isLoading
+      isLoading,
+      isRealtime: true,
+      animationDelay: 0
     },
     {
       title: "1인당 배출량",
-      value: avgEmissionsPerCapita.toFixed(1),
+      value: avgEmissionsPerCapita,
       description: "톤 CO₂/인",
       icon: TrendingUp,
       trend: {
@@ -51,7 +53,9 @@ export function StatsGrid({
         label: "전년 대비 감소",
         isPositive: true
       },
-      isLoading
+      isLoading,
+      isRealtime: true,
+      animationDelay: 100
     },
     {
       title: "등록 기업",
@@ -63,7 +67,9 @@ export function StatsGrid({
         label: "신규 등록",
         isPositive: true
       },
-      isLoading
+      isLoading,
+      isRealtime: false,
+      animationDelay: 200
     },
     {
       title: "보고서",
@@ -75,7 +81,9 @@ export function StatsGrid({
         label: "이번 달 작성",
         isPositive: true
       },
-      isLoading
+      isLoading,
+      isRealtime: false,
+      animationDelay: 300
     }
   ];
 

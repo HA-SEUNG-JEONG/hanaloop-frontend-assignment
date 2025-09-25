@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { fetchCountries, fetchCompanies, fetchPosts } from "@/lib/api";
 import { Country, Company, Post } from "./types";
 import { DashboardPageHeader } from "@/components/common/PageHeader";
-import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { ErrorState } from "@/components/common/ErrorState";
 import {
   SkeletonPageLayout,
@@ -18,6 +17,8 @@ import { TopEmittingCountries } from "./dashboard/components/TopEmittingCountrie
 import { RegionStats } from "./dashboard/components/RegionStats";
 import { RecentReports } from "./dashboard/components/RecentReports";
 import { ActionButtons } from "./dashboard/components/ActionButtons";
+import { RealtimeStatus } from "@/components/common/RealtimeStatus";
+import { cn } from "@/lib/utils";
 
 interface DashboardData {
   countries: Country[];
@@ -35,7 +36,9 @@ export default function Home() {
   });
   const [loadingState, setLoadingState] = useState<LoadingState>("loading");
   const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [autoRefresh, setAutoRefresh] = useState(true);
 
   const loadData = useCallback(async () => {
     setLoadingState("loading");
@@ -53,7 +56,7 @@ export default function Home() {
         companies: companiesData,
         posts: postsData
       });
-      setLastUpdated(new Date().toLocaleString("ko-KR"));
+      setLastUpdated(new Date());
       setLoadingState("success");
     } catch (error) {
       console.error("데이터 로딩 실패:", error);
@@ -70,6 +73,19 @@ export default function Home() {
     loadData();
   }, [loadData]);
 
+  // 자동 새로고침 설정
+  useEffect(() => {
+    if (!autoRefresh) return;
+
+    const interval = setInterval(() => {
+      if (loadingState === "success") {
+        handleRefresh();
+      }
+    }, 30000); // 30초마다 자동 새로고침
+
+    return () => clearInterval(interval);
+  }, [autoRefresh, loadingState]);
+
   // 메모이제이션을 통한 성능 최적화
   const hasData = useMemo(
     () =>
@@ -81,6 +97,16 @@ export default function Home() {
 
   const handleRetry = () => {
     loadData();
+  };
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await loadData();
+    setIsRefreshing(false);
+  };
+
+  const toggleAutoRefresh = () => {
+    setAutoRefresh(!autoRefresh);
   };
 
   if (loadingState === "loading") {
@@ -204,12 +230,30 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background pt-20">
-      <DashboardPageHeader lastUpdated={lastUpdated || undefined} />
+      <DashboardPageHeader lastUpdated={lastUpdated?.toLocaleString("ko-KR")} />
 
       <main
         className="container mx-auto px-4 py-8 space-y-8 animate-fade-in"
         role="main"
       >
+        {/* 실시간 상태 표시 */}
+        <div className="flex justify-between items-center">
+          <RealtimeStatus lastUpdated={lastUpdated} isUpdating={isRefreshing} />
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleAutoRefresh}
+              className={cn(
+                "px-3 py-1.5 text-xs rounded-lg border transition-all duration-200",
+                "hover:scale-105 active:scale-95",
+                autoRefresh
+                  ? "bg-green-50 text-green-700 border-green-300"
+                  : "bg-gray-50 text-gray-700 border-gray-300"
+              )}
+            >
+              {autoRefresh ? "자동 새로고침 ON" : "자동 새로고침 OFF"}
+            </button>
+          </div>
+        </div>
         <section aria-label="주요 통계" className="animate-slide-up">
           <StatsGrid
             countries={data.countries}
