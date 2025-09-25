@@ -21,11 +21,3 @@
 export const handleRetry = (): void => {
   window.location.reload();
 };
-
-/**
- * ErrorState 컴포넌트에서 사용할 수 있는 재시도 핸들러
- *
- * @description
- * - ErrorState의 onRetry prop에 직접 전달 가능
- * - 화살표 함수 없이 직접 사용 가능
- */
