@@ -23,7 +23,8 @@ import { sortCompaniesByEmissions } from "@/lib/helpers/companyUtils";
 import { EmissionsBadge } from "./EmissionsBadge";
 import { CompanyEmissionsModal } from "./CompanyEmissionsModal";
 import { CompanyDetailsModal } from "./CompanyDetailsModal";
-import { Eye, Edit } from "lucide-react";
+import { CompanyCreateModal } from "./CompanyCreateModal";
+import { Eye, Edit, Plus } from "lucide-react";
 
 interface CompaniesTableProps {
   companyEmissionsData: CompanyEmissionsData[];
@@ -42,6 +43,7 @@ export function CompaniesTable({
 }: CompaniesTableProps) {
   const [isEmissionsModalOpen, setIsEmissionsModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
 
   const sortedCompanies = sortCompaniesByEmissions(companyEmissionsData);
@@ -76,12 +78,29 @@ export function CompaniesTable({
     onRefresh?.();
   };
 
+  const handleCreateModalClose = () => {
+    setIsCreateModalOpen(false);
+  };
+
+  const handleCreateSuccess = () => {
+    onRefresh?.();
+  };
+
   return (
     <>
       <Card>
         <CardHeader>
-          <CardTitle>기업별 배출량 상세</CardTitle>
-          <CardDescription>각 기업의 배출량 데이터 및 변화율</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>기업별 배출량 상세</CardTitle>
+              <CardDescription>
+                각 기업의 배출량 데이터 및 변화율
+              </CardDescription>
+            </div>
+            <Button onClick={() => setIsCreateModalOpen(true)}>
+              <Plus className="h-4 w-4 mr-2" />새 회사 추가
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="rounded-md border overflow-hidden">
@@ -196,6 +215,13 @@ export function CompaniesTable({
         onClose={handleEmissionsModalClose}
         onSuccess={handleEmissionsSave}
         company={selectedCompany}
+      />
+
+      {/* 새 회사 추가 모달 */}
+      <CompanyCreateModal
+        isOpen={isCreateModalOpen}
+        onClose={handleCreateModalClose}
+        onSuccess={handleCreateSuccess}
       />
     </>
   );
