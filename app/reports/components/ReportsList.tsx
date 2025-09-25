@@ -44,11 +44,9 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts);
-  const [isSearching, setIsSearching] = useState(false);
   const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(
     null
   );
-  const [isDebouncing, setIsDebouncing] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [postToDelete, setPostToDelete] = useState<Post | null>(null);
 
@@ -101,25 +99,17 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
 
     if (query.trim() === "") {
       setFilteredPosts(posts);
-      setIsSearching(false);
-      setIsDebouncing(false);
       return;
     }
-
-    setIsDebouncing(true);
 
     // 300ms 디바운싱
     const timeout = setTimeout(() => {
       const lowerQuery = query.toLowerCase();
-      const searchResults = posts.filter(
-        (post) =>
-          post.title.toLowerCase().includes(lowerQuery) ||
-          post.content.toLowerCase().includes(lowerQuery)
+      const searchResults = posts.filter((post) =>
+        post.title.toLowerCase().includes(lowerQuery)
       );
 
       setFilteredPosts(searchResults);
-      setIsSearching(false);
-      setIsDebouncing(false);
     }, 300);
 
     setSearchTimeout(timeout);
@@ -137,9 +127,11 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
 
     try {
       await deletePost(postToDelete.id);
-      onRefresh?.();
+
       setIsDeleteDialogOpen(false);
       setPostToDelete(null);
+
+      onRefresh?.();
     } catch (error) {
       console.error("보고서 삭제 실패:", error);
       alert("보고서 삭제 중 오류가 발생했습니다.");
@@ -156,6 +148,13 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
   useEffect(() => {
     if (searchQuery.trim() === "") {
       setFilteredPosts(posts);
+    } else {
+      // 검색어가 있을 때도 새로운 posts에 대해 검색 실행
+      const lowerQuery = searchQuery.toLowerCase();
+      const searchResults = posts.filter((post) =>
+        post.title.toLowerCase().includes(lowerQuery)
+      );
+      setFilteredPosts(searchResults);
     }
   }, [posts, searchQuery]);
 
@@ -220,7 +219,7 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="보고서 제목이나 내용으로 검색..."
+                placeholder="보고서 제목으로 검색..."
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
                 className="pl-10"
