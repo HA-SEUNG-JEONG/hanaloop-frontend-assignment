@@ -1,6 +1,6 @@
 import { Company } from "@/app/types";
-import { InfoCard, InfoItem, StatItem } from "./InfoCard";
-import { EmissionsBadge } from "./EmissionsBadge";
+import { InfoCard, InfoItem, StatItem } from "../InfoCard";
+import { EmissionsBadge } from "../EmissionsBadge";
 import {
   calculateEmissionChange,
   calculateTotalEmployees,

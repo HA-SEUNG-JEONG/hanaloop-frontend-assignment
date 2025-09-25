@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { CompanyEmissionsData, Company } from "@/app/types";
 import { sortCompaniesByEmissions } from "@/lib/helpers/companyUtils";
-import { EmissionsBadge } from "./EmissionsBadge";
+import { EmissionsBadge } from "../EmissionsBadge";
 import { CompanyEmissionsModal } from "./CompanyEmissionsModal";
 import { CompanyDetailsModal } from "./CompanyDetailsModal";
 import { CompanyCreateModal } from "./CompanyCreateModal";

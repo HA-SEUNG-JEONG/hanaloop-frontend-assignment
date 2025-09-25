@@ -41,7 +41,7 @@ import { UsersTable } from "./components/UsersTable";
 import { UsersFilters } from "./components/UsersFilters";
 import { UsersDistributionCharts } from "./components/UsersDistributionCharts";
 import { fetchUsers } from "@/lib/api";
-import { User, UserFilter, UserStats } from "../types";
+import { User, UserFilter, UserStats } from "@/app/types";
 import { useLoadingState } from "@/lib/hooks/useLoadingState";
 import { handleRetry } from "@/lib/helpers/retryUtils";
 

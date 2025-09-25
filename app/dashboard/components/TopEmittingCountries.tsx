@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { Country } from "../../types";
+import { Country } from "@/app/types";
 import { useMemo } from "react";
 import { TOP_COUNTRIES_LIMIT } from "@/lib/constants/animations";
 import { CountryItem } from "./CountryItem";

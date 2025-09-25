@@ -16,7 +16,7 @@
 
 import { useEffect, useState } from "react";
 import { fetchCountries } from "@/lib/api";
-import { Country } from "../types";
+import { Country } from "@/app/types";
 import { useLoadingState } from "@/lib/hooks/useLoadingState";
 import { ErrorState } from "@/components/common/ErrorState";
 import {

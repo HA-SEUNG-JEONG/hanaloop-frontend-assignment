@@ -8,7 +8,7 @@ import {
   CompanyEmissionsData,
   TimeSeriesData,
   ReportsStats
-} from "../types";
+} from "@/app/types";
 import { useLoadingState } from "@/lib/hooks/useLoadingState";
 import { ReportsPageHeader } from "@/components/common/PageHeader";
 import { ErrorState } from "@/components/common/ErrorState";
@@ -23,7 +23,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { ReportsStatsCards } from "./components/ReportsStatsCards";
 import { ChartsSection } from "./components/ChartsSection";
-import { CompaniesTable } from "./components/CompaniesTable";
+import { CompaniesTable } from "./components/company/CompaniesTable";
 import { ReportsList } from "./components/ReportsList";
 import { handleRetry } from "@/lib/helpers/retryUtils";
 

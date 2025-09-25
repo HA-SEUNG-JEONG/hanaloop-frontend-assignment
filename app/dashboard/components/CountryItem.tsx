@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { Country } from "../../types";
+import { Country } from "@/app/types";
 import { cn } from "@/lib/utils";
 import {
   ANIMATION_DELAY,

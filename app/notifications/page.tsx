@@ -5,7 +5,7 @@ import {
   Notification,
   NotificationFilter,
   NotificationCategory
-} from "../types";
+} from "@/app/types";
 import { useLoadingState } from "@/lib/hooks/useLoadingState";
 import {
   fetchNotifications,
