@@ -10,16 +10,16 @@ import {
   XCircle,
   CheckCircle
 } from "lucide-react";
-import { Notification } from "../../types";
+import { Notification } from "@/app/types";
 import {
+  formatRelativeDate,
+  getCategoryName,
+  getNotificationCardClass,
   getNotificationIconClass,
   getPriorityColorClass,
-  getCategoryName,
   getPriorityName,
-  formatRelativeDate,
-  getNotificationCardClass,
   getTitleClass
-} from "../utils/notificationUtils";
+} from "@/lib/helpers/notificationUtils";
 
 /**
  * 개별 알림 아이템 컴포넌트

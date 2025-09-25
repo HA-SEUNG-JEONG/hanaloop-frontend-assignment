@@ -3,7 +3,8 @@ import {
   NotificationType,
   NotificationPriority,
   NotificationCategory
-} from "../../types";
+} from "@/app/types";
+import { formatRelativeTime } from "@/lib/utils";
 
 /**
  * 알림 관련 유틸리티 함수들
@@ -76,22 +77,9 @@ export const getPriorityName = (priority: NotificationPriority): string => {
   }
 };
 
-// 날짜 포맷팅 (상대적 시간)
+// 날짜 포맷팅 (상대적 시간) - 공통 유틸리티 사용
 export const formatRelativeDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffInHours = Math.floor(
-    (now.getTime() - date.getTime()) / (1000 * 60 * 60)
-  );
-
-  if (diffInHours < 1) {
-    return "방금 전";
-  } else if (diffInHours < 24) {
-    return `${diffInHours}시간 전`;
-  } else {
-    const diffInDays = Math.floor(diffInHours / 24);
-    return `${diffInDays}일 전`;
-  }
+  return formatRelativeTime(dateString);
 };
 
 // 알림 카드 스타일 클래스

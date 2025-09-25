@@ -10,7 +10,7 @@ import {
   fetchNotifications,
   markNotificationAsRead,
   deleteNotification as deleteNotificationAPI
-} from "../lib/api";
+} from "@/lib/api";
 import { NotificationHeader } from "./components/NotificationHeader";
 import { NotificationFilters } from "./components/NotificationFilters";
 import { NotificationItem } from "./components/NotificationItem";
@@ -24,7 +24,7 @@ import {
   matchesReadFilter,
   matchesCategoryFilter,
   matchesSearchTerm
-} from "./utils/notificationUtils";
+} from "@/lib/helpers/notificationUtils";
 
 /**
  * 알림 페이지 메인 컴포넌트
