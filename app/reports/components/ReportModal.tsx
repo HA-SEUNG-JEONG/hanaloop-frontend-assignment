@@ -183,9 +183,6 @@ export function ReportModal({
               취소
             </Button>
             <Button type="submit" disabled={loadingState === "loading"}>
-              {loadingState === "loading" && (
-                <LoadingSpinner className="mr-2 h-4 w-4" />
-              )}
               {report ? "수정하기" : "작성하기"}
             </Button>
           </DialogFooter>
