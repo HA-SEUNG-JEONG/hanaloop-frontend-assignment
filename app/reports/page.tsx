@@ -33,31 +33,45 @@ export default function ReportsPage() {
   const { loadingState, error, setLoadingState, setError } =
     useLoadingState("loading");
 
+  const loadReportData = async () => {
+    setLoadingState("loading");
+    setError(null);
+
+    try {
+      const [companiesData, postsData] = await Promise.all([
+        fetchCompanies(),
+        fetchPosts()
+      ]);
+      setCompanies(companiesData);
+      setPosts(postsData);
+      setLoadingState("success");
+    } catch (error) {
+      console.error("데이터 로딩 실패:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "데이터를 불러오는 중 오류가 발생했습니다."
+      );
+      setLoadingState("error");
+    }
+  };
+
+  // 삭제 후 데이터 새로고침 (로딩 상태 없이)
+  const refreshData = async () => {
+    try {
+      const [companiesData, postsData] = await Promise.all([
+        fetchCompanies(),
+        fetchPosts()
+      ]);
+      setCompanies(companiesData);
+      setPosts(postsData);
+    } catch (error) {
+      console.error("데이터 새로고침 실패:", error);
+    }
+  };
+
   useEffect(() => {
-    const loadData = async () => {
-      setLoadingState("loading");
-      setError(null);
-
-      try {
-        const [companiesData, postsData] = await Promise.all([
-          fetchCompanies(),
-          fetchPosts()
-        ]);
-        setCompanies(companiesData);
-        setPosts(postsData);
-        setLoadingState("success");
-      } catch (error) {
-        console.error("데이터 로딩 실패:", error);
-        setError(
-          error instanceof Error
-            ? error.message
-            : "데이터를 불러오는 중 오류가 발생했습니다."
-        );
-        setLoadingState("error");
-      }
-    };
-
-    loadData();
+    loadReportData();
   }, [setLoadingState, setError]);
 
   // 회사별 최신 배출량 데이터
@@ -190,18 +204,12 @@ export default function ReportsPage() {
             console.log("편집:", companyId);
             // TODO: 편집 모달 또는 페이지로 이동
           }}
-          onRefresh={() => {
-            // 데이터 새로고침
-            window.location.reload();
-          }}
+          onRefresh={loadReportData}
         />
         <ReportsList
           posts={posts}
           companies={companies}
-          onRefresh={() => {
-            // 데이터 새로고침
-            window.location.reload();
-          }}
+          onRefresh={refreshData}
         />
       </div>
     </div>

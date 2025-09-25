@@ -41,7 +41,7 @@ export default function AnalyticsPage() {
     useLoadingState("loading");
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadAnalyticsData = async () => {
       setLoadingState("loading");
       setError(null);
 
@@ -60,7 +60,7 @@ export default function AnalyticsPage() {
       }
     };
 
-    loadData();
+    loadAnalyticsData();
   }, [setLoadingState, setError]);
 
   // 데이터 처리 - 단순한 계산이므로 메모이제이션 불필요 (룰 6번)
