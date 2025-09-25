@@ -19,7 +19,7 @@ import {
   BarChart,
   Bar
 } from "recharts";
-import { CompanyEmissionsData, TimeSeriesData } from "../../types";
+import { CompanyEmissionsData, TimeSeriesData } from "@/app/types";
 
 interface ChartsSectionProps {
   companyEmissionsData: CompanyEmissionsData[];

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Filter, Search } from "lucide-react";
-import { NotificationFilter, NotificationCategory } from "../../types";
+import { NotificationFilter, NotificationCategory } from "@/app/types";
 
 /**
  * 알림 필터 및 검색 컴포넌트

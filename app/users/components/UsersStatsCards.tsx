@@ -6,7 +6,7 @@
 
 import { StatsCards, StatCardData } from "@/components/common/StatsCards";
 import { Users, Shield, UserPlus, Mail } from "lucide-react";
-import { UserStats } from "../../types";
+import { UserStats } from "@/app/types";
 
 interface UsersStatsCardsProps {
   stats: UserStats;

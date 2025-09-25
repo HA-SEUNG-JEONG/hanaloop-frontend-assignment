@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { CompanyEmissionsData } from "../../types";
+import { CompanyEmissionsData } from "@/app/types";
 import { sortCompaniesByEmissions } from "@/lib/helpers/companyUtils";
 import { EmissionsBadge } from "./EmissionsBadge";
 

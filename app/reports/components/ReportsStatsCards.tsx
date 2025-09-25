@@ -4,9 +4,9 @@
  * 공통 StatsCards 컴포넌트를 사용하여 Reports 특화 데이터를 표시
  */
 
+import { ReportsStats } from "@/app/types";
 import { StatsCards, StatCardData } from "@/components/common/StatsCards";
 import { Building2, TrendingUp, Calendar, FileText } from "lucide-react";
-import { ReportsStats } from "../../types";
 
 interface ReportsStatsCardsProps {
   stats: ReportsStats;

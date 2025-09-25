@@ -4,7 +4,29 @@ import {
   NotificationPriority,
   NotificationCategory
 } from "@/app/types";
-import { formatRelativeTime } from "@/lib/utils";
+import { cn, formatRelativeTime } from "@/lib/utils";
+
+/**
+ * 버튼 호버 클래스
+ * @param variant "read" | "delete"
+ * @returns
+ */
+export const getButtonHoverClass = (variant: "read" | "delete") => {
+  const baseClass =
+    "transition-all duration-300 hover:scale-105 active:scale-95";
+
+  switch (variant) {
+    case "read":
+      return cn(
+        baseClass,
+        "hover:bg-green-50 hover:text-green-700 hover:border-green-300"
+      );
+    case "delete":
+      return cn(baseClass, "text-red-600 hover:text-red-700 hover:bg-red-50");
+    default:
+      return baseClass;
+  }
+};
 
 /**
  * 알림 관련 유틸리티 함수들

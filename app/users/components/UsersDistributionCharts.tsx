@@ -21,7 +21,7 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { User, UserRole } from "../../types";
+import { User, UserRole } from "@/app/types";
 
 interface UsersDistributionChartsProps {
   users: User[];

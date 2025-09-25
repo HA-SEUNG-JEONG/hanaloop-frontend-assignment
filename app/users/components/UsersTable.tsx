@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { User, UserRole, UserStatus } from "../../types";
+import { User, UserRole, UserStatus } from "@/app/types";
 
 interface UsersTableProps {
   users: User[];

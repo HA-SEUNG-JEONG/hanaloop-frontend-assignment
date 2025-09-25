@@ -14,7 +14,7 @@
 
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { UserFilter, UserRole, UserStatus } from "../../types";
+import { UserFilter, UserRole, UserStatus } from "@/app/types";
 
 interface UsersFiltersProps {
   filter: UserFilter;

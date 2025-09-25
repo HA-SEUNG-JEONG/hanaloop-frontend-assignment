@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { Subsidiary } from "../../types";
+import { Subsidiary } from "@/app/types";
 import { sortSubsidiariesByOwnership } from "@/lib/helpers/companyUtils";
 
 interface SubsidiariesTableProps {

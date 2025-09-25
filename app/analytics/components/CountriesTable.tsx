@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import { Country } from "../../types";
+import { Country } from "@/app/types";
 
 interface CountriesTableProps {
   countries: Country[];

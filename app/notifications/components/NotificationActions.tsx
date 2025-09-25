@@ -2,28 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Check, Trash2 } from "lucide-react";
 import { Notification } from "@/app/types";
 import { cn } from "@/lib/utils";
+import { getButtonHoverClass } from "@/lib/helpers/notificationUtils";
 
 // 상수 정의
 const HOVER_SCALE = 1.05;
 const ACTIVE_SCALE = 0.95;
-
-// 유틸리티 함수
-const getButtonHoverClass = (variant: "read" | "delete") => {
-  const baseClass =
-    "transition-all duration-300 hover:scale-105 active:scale-95";
-
-  switch (variant) {
-    case "read":
-      return cn(
-        baseClass,
-        "hover:bg-green-50 hover:text-green-700 hover:border-green-300"
-      );
-    case "delete":
-      return cn(baseClass, "text-red-600 hover:text-red-700 hover:bg-red-50");
-    default:
-      return baseClass;
-  }
-};
 
 interface NotificationActionsProps {
   notification: Notification;
