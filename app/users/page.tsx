@@ -35,12 +35,12 @@ import {
 } from "@/components/common/SkeletonComponents";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/common/ErrorState";
-import { UsersPageHeader } from "./components/UsersPageHeader";
+import { UsersPageHeader } from "@/components/common/PageHeader";
 import { UsersStatsCards } from "./components/UsersStatsCards";
 import { UsersTable } from "./components/UsersTable";
 import { UsersFilters } from "./components/UsersFilters";
 import { UsersDistributionCharts } from "./components/UsersDistributionCharts";
-import { fetchUsers } from "../lib/api";
+import { fetchUsers } from "@/lib/api";
 import { User, UserFilter, UserStats } from "../types";
 
 type LoadingState = "idle" | "loading" | "success" | "error";
