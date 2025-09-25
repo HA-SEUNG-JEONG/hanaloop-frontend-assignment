@@ -1,25 +1,20 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Bell,
-  Check,
-  AlertTriangle,
-  Info,
-  XCircle,
-  CheckCircle
-} from "lucide-react";
 import { Notification } from "@/app/types";
-import {
-  formatRelativeDate,
-  getCategoryName,
-  getNotificationCardClass,
-  getNotificationIconClass,
-  getPriorityColorClass,
-  getPriorityName,
-  getTitleClass
-} from "@/lib/helpers/notificationUtils";
+import { getNotificationCardClass } from "@/lib/helpers/notificationUtils";
+import { cn } from "@/lib/utils";
+import { NotificationIcon } from "./NotificationIcon";
+import { NotificationContent } from "./NotificationContent";
+import { NotificationActions } from "./NotificationActions";
+
+// 상수 정의
+const DELETE_ANIMATION_DURATION = 300;
+
+interface NotificationItemProps {
+  notification: Notification;
+  onMarkAsRead: (id: number) => void;
+  onDelete: (id: number) => void;
+}
 
 /**
  * 개별 알림 아이템 컴포넌트
@@ -32,94 +27,61 @@ import {
  * 아키텍처:
  * - memo로 최적화하여 불필요한 리렌더링 방지
  * - Props를 통한 데이터와 액션 전달
+ * - 하위 컴포넌트들로 분리된 구조
  */
-interface NotificationItemProps {
-  notification: Notification;
-  onMarkAsRead: (id: number) => void;
-  onDelete: (id: number) => void;
-}
-
-const NotificationIcon = ({ type }: { type: Notification["type"] }) => {
-  const iconClass = getNotificationIconClass(type);
-
-  switch (type) {
-    case "info":
-      return <Info className={iconClass} />;
-    case "warning":
-      return <AlertTriangle className={iconClass} />;
-    case "error":
-      return <XCircle className={iconClass} />;
-    case "success":
-      return <CheckCircle className={iconClass} />;
-    default:
-      return <Bell className={iconClass} />;
-  }
-};
-
 export const NotificationItem = memo(function NotificationItem({
   notification,
   onMarkAsRead,
   onDelete
 }: NotificationItemProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleMarkAsRead = () => {
+    onMarkAsRead(notification.id);
+  };
+
+  const handleDelete = () => {
+    setIsDeleting(true);
+    setTimeout(() => {
+      onDelete(notification.id);
+    }, DELETE_ANIMATION_DURATION);
+  };
+
   return (
-    <Card className={getNotificationCardClass(notification.isRead)}>
+    <Card
+      className={cn(
+        getNotificationCardClass(notification.isRead),
+        "hover-lift transition-all duration-300 group",
+        "animate-slide-in-up",
+        isDeleting && "animate-fade-out scale-95"
+      )}
+      role="article"
+      aria-labelledby={`notification-title-${notification.id}`}
+      aria-describedby={`notification-message-${notification.id}`}
+    >
       <CardContent className="p-6">
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-4 flex-1">
             <div className="mt-1">
-              <NotificationIcon type={notification.type} />
-            </div>
-
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center space-x-2 mb-2">
-                <h3 className={getTitleClass(notification.isRead)}>
-                  {notification.title}
-                </h3>
-                {!notification.isRead && (
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <div
+                className={cn(
+                  "transition-all duration-300 group-hover:scale-110",
+                  !notification.isRead && "animate-pulse-glow"
                 )}
-              </div>
-
-              <p className="text-gray-600 dark:text-gray-400 mb-3">
-                {notification.message}
-              </p>
-
-              <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                <span>{formatRelativeDate(notification.createdAt)}</span>
-                <Badge
-                  variant="outline"
-                  className={getPriorityColorClass(notification.priority)}
-                >
-                  {getPriorityName(notification.priority)}
-                </Badge>
-                <Badge variant="secondary">
-                  {getCategoryName(notification.category)}
-                </Badge>
+              >
+                <NotificationIcon type={notification.type} />
               </div>
             </div>
+
+            <NotificationContent notification={notification} />
           </div>
 
-          <div className="flex items-center space-x-2 ml-4">
-            {!notification.isRead && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onMarkAsRead(notification.id)}
-                className="text-xs"
-              >
-                <Check className="mr-1 h-3 w-3" />
-                읽음
-              </Button>
-            )}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onDelete(notification.id)}
-              className="text-red-600 hover:text-red-700 hover:bg-red-50"
-            >
-              삭제
-            </Button>
-          </div>
+          <NotificationActions
+            notification={notification}
+            onMarkAsRead={handleMarkAsRead}
+            onDelete={handleDelete}
+            isDeleting={isDeleting}
+          />
         </div>
       </CardContent>
     </Card>
