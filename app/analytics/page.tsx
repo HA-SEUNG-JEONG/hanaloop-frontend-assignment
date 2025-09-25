@@ -33,6 +33,7 @@ import {
   createBarChartData,
   createPieChartData
 } from "@/lib/helpers/analyticsUtils";
+import { handleRetry } from "@/lib/helpers/retryUtils";
 
 export default function AnalyticsPage() {
   const [countries, setCountries] = useState<Country[]>([]);
@@ -82,10 +83,6 @@ export default function AnalyticsPage() {
 
   const barChartData = createBarChartData(countries);
   const pieChartData = createPieChartData(countries);
-
-  const handleRetry = () => {
-    window.location.reload();
-  };
 
   if (loadingState === "loading") {
     return (

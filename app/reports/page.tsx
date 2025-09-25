@@ -25,6 +25,7 @@ import { ReportsStatsCards } from "./components/ReportsStatsCards";
 import { ChartsSection } from "./components/ChartsSection";
 import { CompaniesTable } from "./components/CompaniesTable";
 import { ReportsList } from "./components/ReportsList";
+import { handleRetry } from "@/lib/helpers/retryUtils";
 
 export default function ReportsPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -163,7 +164,7 @@ export default function ReportsPage() {
     return (
       <ErrorState
         message={error || "데이터를 불러오는 중 오류가 발생했습니다."}
-        onRetry={() => window.location.reload()}
+        onRetry={handleRetry}
       />
     );
   }

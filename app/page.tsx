@@ -35,6 +35,7 @@ import { TopEmittingCountries } from "./dashboard/components/TopEmittingCountrie
 import { RegionStats } from "./dashboard/components/RegionStats";
 import { RecentReports } from "./dashboard/components/RecentReports";
 import { ActionButtons } from "./dashboard/components/ActionButtons";
+import { handleRetry } from "@/lib/helpers/retryUtils";
 
 export default function HomePage() {
   const [countries, setCountries] = useState<Country[]>([]);
@@ -87,7 +88,6 @@ export default function HomePage() {
         title="HanaLoop 배출량 대시보드"
         description="전 세계 국가별 및 기업별 CO₂ 배출량 모니터링"
       >
-        {/* Stats Cards Skeleton */}
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <SkeletonStatsCard />
           <SkeletonStatsCard />
@@ -141,7 +141,7 @@ export default function HomePage() {
     return (
       <ErrorState
         message={error || "데이터를 불러오는 중 오류가 발생했습니다."}
-        onRetry={() => window.location.reload()}
+        onRetry={handleRetry}
       />
     );
   }

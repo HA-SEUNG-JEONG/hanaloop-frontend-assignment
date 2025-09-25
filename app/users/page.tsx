@@ -43,6 +43,7 @@ import { UsersDistributionCharts } from "./components/UsersDistributionCharts";
 import { fetchUsers } from "@/lib/api";
 import { User, UserFilter, UserStats } from "../types";
 import { useLoadingState } from "@/lib/hooks/useLoadingState";
+import { handleRetry } from "@/lib/helpers/retryUtils";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -194,7 +195,7 @@ export default function UsersPage() {
     return (
       <ErrorState
         message={error || "사용자 데이터를 불러오는 중 오류가 발생했습니다."}
-        onRetry={() => window.location.reload()}
+        onRetry={handleRetry}
       />
     );
   }

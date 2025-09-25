@@ -26,6 +26,7 @@ import {
   matchesCategoryFilter,
   matchesSearchTerm
 } from "@/lib/helpers/notificationUtils";
+import { handleRetry } from "@/lib/helpers/retryUtils";
 
 /**
  * 알림 페이지 메인 컴포넌트
@@ -113,7 +114,7 @@ export default function NotificationsPage() {
         .map((n) => markNotificationAsRead(n.id));
       await Promise.all(promises);
       // 모든 알림을 읽음 처리한 후 데이터 다시 로드
-      window.location.reload();
+      handleRetry();
     } catch (error) {
       console.error("모든 알림 읽음 처리 실패:", error);
       setError(
@@ -137,11 +138,6 @@ export default function NotificationsPage() {
           : "알림 삭제 중 오류가 발생했습니다."
       );
     }
-  };
-
-  // 재시도
-  const handleRetry = () => {
-    window.location.reload();
   };
 
   // 필터가 적용되었는지 확인
