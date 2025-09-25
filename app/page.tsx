@@ -33,7 +33,7 @@ import { DashboardPageHeader } from "@/components/common/PageHeader";
 import { StatsGrid } from "./dashboard/components/StatsGrid";
 import { TopEmittingCountries } from "./dashboard/components/TopEmittingCountries";
 import { RegionStats } from "./dashboard/components/RegionStats";
-import { RecentReports } from "./dashboard/components/RecentReports";
+import { RecentReportsWidget } from "./dashboard/components/RecentReportsWidget";
 import { ActionButtons } from "./dashboard/components/ActionButtons";
 import { handleRetry } from "@/lib/helpers/retryUtils";
 
@@ -161,7 +161,7 @@ export default function HomePage() {
         </section>
 
         {/* 최근 보고서 */}
-        <RecentReports posts={posts} companies={companies} />
+        <RecentReportsWidget companies={companies} />
 
         {/* 액션 버튼 */}
         <ActionButtons />

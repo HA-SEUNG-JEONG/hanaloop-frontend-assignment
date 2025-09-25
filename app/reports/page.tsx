@@ -181,6 +181,7 @@ export default function ReportsPage() {
         />
         <CompaniesTable
           companyEmissionsData={companyEmissionsData}
+          companies={companies}
           onViewDetails={(companyId) => {
             console.log("상세보기:", companyId);
             // TODO: 상세보기 모달 또는 페이지로 이동
@@ -189,8 +190,19 @@ export default function ReportsPage() {
             console.log("편집:", companyId);
             // TODO: 편집 모달 또는 페이지로 이동
           }}
+          onRefresh={() => {
+            // 데이터 새로고침
+            window.location.reload();
+          }}
         />
-        <ReportsList posts={posts} companies={companies} />
+        <ReportsList
+          posts={posts}
+          companies={companies}
+          onRefresh={() => {
+            // 데이터 새로고침
+            window.location.reload();
+          }}
+        />
       </div>
     </div>
   );
