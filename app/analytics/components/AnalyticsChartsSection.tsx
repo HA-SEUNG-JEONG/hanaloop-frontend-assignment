@@ -12,7 +12,7 @@
  * - JavaScript 로직 최소화로 성능 최적화
  */
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -35,6 +35,7 @@ import {
   Pie,
   Cell
 } from "recharts";
+import { cn } from "@/lib/utils";
 
 interface ChartsSectionProps {
   barChartData: Array<{
@@ -77,13 +78,36 @@ export function AnalyticsChartsSection({
   barChartData,
   pieChartData
 }: ChartsSectionProps) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  // 컴포넌트 마운트 시 애니메이션 트리거
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
       {/* 상위 10개국 배출량 막대 차트 */}
-      <Card>
+      <Card
+        className={cn(
+          "hover-lift transition-all duration-500",
+          isVisible ? "animate-fade-in-scale" : "opacity-0 scale-95"
+        )}
+      >
         <CardHeader>
-          <CardTitle>상위 10개국 배출량</CardTitle>
-          <CardDescription>CO₂ 배출량 기준 상위 10개국</CardDescription>
+          <CardTitle className="animate-slide-in-up">
+            상위 10개국 배출량
+          </CardTitle>
+          <CardDescription
+            className="animate-slide-in-up"
+            style={{ animationDelay: "100ms" }}
+          >
+            CO₂ 배출량 기준 상위 10개국
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer
@@ -106,17 +130,36 @@ export function AnalyticsChartsSection({
               />
               <YAxis fontSize={14} className="text-sm sm:text-base" />
               <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey="emissions" fill="#8884d8" />
+              <Bar
+                dataKey="emissions"
+                fill="#8884d8"
+                radius={[4, 4, 0, 0]}
+                animationBegin={0}
+                animationDuration={1500}
+              />
             </BarChart>
           </ChartContainer>
         </CardContent>
       </Card>
 
       {/* 지역별 배출량 파이 차트 */}
-      <Card>
+      <Card
+        className={cn(
+          "hover-lift transition-all duration-500",
+          isVisible ? "animate-fade-in-scale" : "opacity-0 scale-95"
+        )}
+        style={{ animationDelay: "200ms" }}
+      >
         <CardHeader>
-          <CardTitle>지역별 배출량 비율</CardTitle>
-          <CardDescription>지역별 CO₂ 배출량 분포</CardDescription>
+          <CardTitle className="animate-slide-in-up">
+            지역별 배출량 비율
+          </CardTitle>
+          <CardDescription
+            className="animate-slide-in-up"
+            style={{ animationDelay: "300ms" }}
+          >
+            지역별 CO₂ 배출량 분포
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer
@@ -141,6 +184,8 @@ export function AnalyticsChartsSection({
                 style={{
                   fontSize: "var(--pie-label-size)"
                 }}
+                animationBegin={0}
+                animationDuration={2000}
               >
                 {pieChartData.map((entry, index) => (
                   <Cell
