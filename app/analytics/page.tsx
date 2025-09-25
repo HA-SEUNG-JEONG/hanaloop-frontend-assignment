@@ -17,7 +17,6 @@
 import { useEffect, useState } from "react";
 import { fetchCountries } from "@/lib/api";
 import { Country } from "../types";
-import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { ErrorState } from "@/components/common/ErrorState";
 import {
   SkeletonPageLayout,
@@ -70,32 +69,38 @@ export default function AnalyticsPage() {
     minEmissions
   };
 
-  // 차트 데이터
-  const prepareChartData = () => {
-    const barChartData = countries
-      .sort((a, b) => b.emissions - a.emissions)
-      .slice(0, 10)
-      .map((country) => ({
-        name: country.name,
-        emissions: country.emissions,
-        population: country.population / 1000000, // 백만 단위로 변환
-        gdp: country.gdp
-      }));
+  // 차트 데이터 생성 함수들
+  const createBarChartData = (countries: Country[]) => {
+    const sortedCountries = countries.sort((a, b) => b.emissions - a.emissions);
+    const top10Countries = sortedCountries.slice(0, 10);
+    const top10CountriesData = top10Countries.map(
+      ({ name, emissions, population, gdp }) => ({
+        name,
+        emissions,
+        population: population / 1000000, // 백만 단위로 변환
+        gdp
+      })
+    );
 
-    const pieChartData = countries.reduce((acc, country) => {
-      const existing = acc.find((item) => item.name === country.region);
-      if (existing) {
-        existing.value += country.emissions;
-      } else {
-        acc.push({ name: country.region, value: country.emissions });
-      }
-      return acc;
-    }, [] as { name: string; value: number }[]);
-
-    return { barChartData, pieChartData };
+    return top10CountriesData;
   };
 
-  const chartData = prepareChartData();
+  const createPieChartData = (countries: Country[]) => {
+    const regionMap = new Map<string, number>();
+
+    countries.forEach((country) => {
+      const current = regionMap.get(country.region) || 0;
+      regionMap.set(country.region, current + country.emissions);
+    });
+
+    return Array.from(regionMap.entries()).map(([name, value]) => ({
+      name,
+      value
+    }));
+  };
+
+  const barChartData = createBarChartData(countries);
+  const pieChartData = createPieChartData(countries);
 
   const handleRetry = () => {
     setLoading(true);
@@ -140,7 +145,10 @@ export default function AnalyticsPage() {
       <AnalyticsPageHeader />
       <div className="container mx-auto px-4 py-8 space-y-8">
         <AnalyticsStatsCards {...statsData} />
-        <AnalyticsChartsSection {...chartData} />
+        <AnalyticsChartsSection
+          barChartData={barChartData}
+          pieChartData={pieChartData}
+        />
         <CountriesTable countries={countries} />
       </div>
     </div>
