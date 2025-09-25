@@ -1,71 +1,8 @@
 import { Notification } from "@/app/types";
 import { delay, jitter, maybeFail } from "./simulation";
+import { notifications } from "@/app/seed";
 
-// 샘플 알림 데이터
-const sampleNotifications: Notification[] = [
-  {
-    id: 1,
-    title: "배출량 임계값 초과",
-    message: "중국(CN)의 CO₂ 배출량이 설정된 임계값을 초과했습니다.",
-    type: "warning",
-    isRead: false,
-    createdAt: "2024-01-15T10:30:00Z",
-    priority: "high",
-    category: "emission"
-  },
-  {
-    id: 2,
-    title: "새로운 보고서 제출",
-    message: "삼성전자가 2024년 지속가능성 보고서를 제출했습니다.",
-    type: "info",
-    isRead: false,
-    createdAt: "2024-01-15T09:15:00Z",
-    priority: "medium",
-    category: "report"
-  },
-  {
-    id: 3,
-    title: "시스템 업데이트 완료",
-    message: "배출량 모니터링 시스템이 성공적으로 업데이트되었습니다.",
-    type: "success",
-    isRead: true,
-    createdAt: "2024-01-14T16:45:00Z",
-    priority: "low",
-    category: "system"
-  },
-  {
-    id: 4,
-    title: "데이터 동기화 오류",
-    message: "일부 국가 데이터 동기화 중 오류가 발생했습니다.",
-    type: "error",
-    isRead: true,
-    createdAt: "2024-01-14T14:20:00Z",
-    priority: "high",
-    category: "system"
-  },
-  {
-    id: 5,
-    title: "새로운 기업 등록",
-    message: "LG전자가 시스템에 새로 등록되었습니다.",
-    type: "info",
-    isRead: true,
-    createdAt: "2024-01-14T11:30:00Z",
-    priority: "medium",
-    category: "company"
-  },
-  {
-    id: 6,
-    title: "월간 보고서 생성",
-    message: "2024년 1월 월간 배출량 보고서가 생성되었습니다.",
-    type: "success",
-    isRead: true,
-    createdAt: "2024-01-13T18:00:00Z",
-    priority: "low",
-    category: "report"
-  }
-];
-
-let _notifications = [...sampleNotifications];
+let _notifications = [...notifications];
 
 /**
  * 알림 관련 API 함수들
