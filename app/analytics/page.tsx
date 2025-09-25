@@ -15,7 +15,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchCountries } from "../lib/api";
+import { fetchCountries } from "@/lib/api";
 import { Country } from "../types";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { ErrorState } from "@/components/common/ErrorState";
@@ -25,7 +25,7 @@ import {
   SkeletonTable,
   SkeletonChart
 } from "@/components/common/SkeletonComponents";
-import { AnalyticsPageHeader } from "./components/AnalyticsPageHeader";
+import { AnalyticsPageHeader } from "@/components/common/PageHeader";
 import { AnalyticsStatsCards } from "./components/AnalyticsStatsCards";
 import { AnalyticsChartsSection } from "./components/AnalyticsChartsSection";
 import { CountriesTable } from "./components/CountriesTable";

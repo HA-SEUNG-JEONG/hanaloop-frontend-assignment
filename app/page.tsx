@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { fetchCountries, fetchCompanies, fetchPosts } from "./lib/api";
+import { fetchCountries, fetchCompanies, fetchPosts } from "@/lib/api";
 import { Country, Company, Post } from "./types";
-import { DashboardHeader } from "./dashboard/components/DashboardHeader";
+import { DashboardPageHeader } from "@/components/common/PageHeader";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { ErrorState } from "@/components/common/ErrorState";
 import {
@@ -181,10 +181,7 @@ export default function Home() {
   if (!hasData) {
     return (
       <div className="min-h-screen bg-background pt-20">
-        <DashboardHeader
-          title="HanaLoop 배출량 대시보드"
-          description="전 세계 국가별 및 기업별 CO₂ 배출량 모니터링"
-        />
+        <DashboardPageHeader />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center space-y-4">
             <h2 className="text-2xl font-semibold text-foreground">
@@ -207,11 +204,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background pt-20">
-      <DashboardHeader
-        title="HanaLoop 배출량 대시보드"
-        description="전 세계 국가별 및 기업별 CO₂ 배출량 모니터링"
-        lastUpdated={lastUpdated || undefined}
-      />
+      <DashboardPageHeader lastUpdated={lastUpdated || undefined} />
 
       <main
         className="container mx-auto px-4 py-8 space-y-8 animate-fade-in"
