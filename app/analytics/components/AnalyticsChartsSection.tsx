@@ -36,6 +36,7 @@ import {
   Cell
 } from "recharts";
 import { cn } from "@/lib/utils";
+import { CHART_COLORS } from "@/lib/constants/chartColors";
 
 interface ChartsSectionProps {
   barChartData: Array<{
@@ -49,16 +50,6 @@ interface ChartsSectionProps {
     value: number;
   }>;
 }
-
-// 차트 색상 팔레트
-const CHART_COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#8884D8",
-  "#82CA9D"
-];
 
 // 파이 차트 라벨 데이터 타입
 interface PieChartLabelData {

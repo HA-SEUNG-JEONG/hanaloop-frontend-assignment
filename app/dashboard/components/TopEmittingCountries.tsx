@@ -9,15 +9,15 @@ import { Badge } from "@/components/ui/badge";
 import { Country } from "../../types";
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
+import {
+  ANIMATION_DELAY,
+  PROGRESS_DELAY_OFFSET,
+  TOP_COUNTRIES_LIMIT
+} from "@/lib/constants/animations";
 
 interface TopEmittingCountriesProps {
   countries: Country[];
 }
-
-// 상수 정의
-const ANIMATION_DELAY = 150;
-const PROGRESS_DELAY_OFFSET = 300;
-const TOP_COUNTRIES_LIMIT = 5;
 
 // 순위별 색상 스타일
 const getRankStyle = (index: number) => {

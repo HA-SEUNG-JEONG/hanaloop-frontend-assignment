@@ -6,9 +6,7 @@ import { cn } from "@/lib/utils";
 import { NotificationIcon } from "./NotificationIcon";
 import { NotificationContent } from "./NotificationContent";
 import { NotificationActions } from "./NotificationActions";
-
-// 상수 정의
-const DELETE_ANIMATION_DURATION = 300;
+import { DELETE_ANIMATION_DURATION } from "@/lib/constants/animations";
 
 interface NotificationItemProps {
   notification: Notification;
