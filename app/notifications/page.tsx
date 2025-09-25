@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   Notification,
   NotificationFilter,
   NotificationCategory
 } from "../types";
+import { useLoadingState } from "@/lib/hooks/useLoadingState";
 import {
   fetchNotifications,
   markNotificationAsRead,
@@ -42,7 +43,7 @@ import {
  *
  * 렌더링 최적화:
  * - NotificationItem만 memo로 최적화 (리스트 렌더링)
- * - 과도한 최적화 지양 (커서룰 6번 준수)
+ * - 과도한 최적화 지양
  */
 export default function NotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -51,31 +52,31 @@ export default function NotificationsPage() {
     NotificationCategory | "all"
   >("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // 데이터 로딩
-  const loadNotifications = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await fetchNotifications();
-      setNotifications(data);
-    } catch (err) {
-      console.error("알림 로딩 실패:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "알림을 불러오는 중 오류가 발생했습니다."
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const { loadingState, error, setLoadingState, setError } =
+    useLoadingState("loading");
 
   useEffect(() => {
+    const loadNotifications = async () => {
+      setLoadingState("loading");
+      setError(null);
+
+      try {
+        const data = await fetchNotifications();
+        setNotifications(data);
+        setLoadingState("success");
+      } catch (error) {
+        console.error("알림 로딩 실패:", error);
+        setError(
+          error instanceof Error
+            ? error.message
+            : "알림을 불러오는 중 오류가 발생했습니다."
+        );
+        setLoadingState("error");
+      }
+    };
+
     loadNotifications();
-  }, [loadNotifications]);
+  }, [setLoadingState, setError]);
 
   // 필터링된 알림 목록
   const filteredNotifications = notifications.filter((notification) => {
@@ -94,11 +95,11 @@ export default function NotificationsPage() {
     try {
       const updatedNotifications = await markNotificationAsRead(id);
       setNotifications(updatedNotifications);
-    } catch (err) {
-      console.error("알림 읽음 처리 실패:", err);
+    } catch (error) {
+      console.error("알림 읽음 처리 실패:", error);
       setError(
-        err instanceof Error
-          ? err.message
+        error instanceof Error
+          ? error.message
           : "알림 읽음 처리 중 오류가 발생했습니다."
       );
     }
@@ -112,12 +113,12 @@ export default function NotificationsPage() {
         .map((n) => markNotificationAsRead(n.id));
       await Promise.all(promises);
       // 모든 알림을 읽음 처리한 후 데이터 다시 로드
-      await loadNotifications();
-    } catch (err) {
-      console.error("모든 알림 읽음 처리 실패:", err);
+      window.location.reload();
+    } catch (error) {
+      console.error("모든 알림 읽음 처리 실패:", error);
       setError(
-        err instanceof Error
-          ? err.message
+        error instanceof Error
+          ? error.message
           : "모든 알림 읽음 처리 중 오류가 발생했습니다."
       );
     }
@@ -128,17 +129,19 @@ export default function NotificationsPage() {
     try {
       const updatedNotifications = await deleteNotificationAPI(id);
       setNotifications(updatedNotifications);
-    } catch (err) {
-      console.error("알림 삭제 실패:", err);
+    } catch (error) {
+      console.error("알림 삭제 실패:", error);
       setError(
-        err instanceof Error ? err.message : "알림 삭제 중 오류가 발생했습니다."
+        error instanceof Error
+          ? error.message
+          : "알림 삭제 중 오류가 발생했습니다."
       );
     }
   };
 
   // 재시도
   const handleRetry = () => {
-    loadNotifications();
+    window.location.reload();
   };
 
   // 필터가 적용되었는지 확인
@@ -146,7 +149,7 @@ export default function NotificationsPage() {
     searchTerm !== "" || filter !== "all" || categoryFilter !== "all";
 
   // 로딩 상태
-  if (loading) {
+  if (loadingState === "loading") {
     return (
       <SkeletonPageLayout
         title="알림 센터"
@@ -170,10 +173,10 @@ export default function NotificationsPage() {
   }
 
   // 에러 상태
-  if (error) {
+  if (loadingState === "error") {
     return (
       <ErrorState
-        message={error}
+        message={error || "알림을 불러오는 중 오류가 발생했습니다."}
         onRetry={handleRetry}
         title="알림 로딩 오류"
       />

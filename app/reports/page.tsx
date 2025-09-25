@@ -9,6 +9,7 @@ import {
   TimeSeriesData,
   ReportsStats
 } from "../types";
+import { useLoadingState } from "@/lib/hooks/useLoadingState";
 import { ReportsPageHeader } from "@/components/common/PageHeader";
 import { ErrorState } from "@/components/common/ErrorState";
 import {
@@ -28,29 +29,35 @@ import { ReportsList } from "./components/ReportsList";
 export default function ReportsPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { loadingState, error, setLoadingState, setError } =
+    useLoadingState("loading");
 
   useEffect(() => {
     const loadData = async () => {
+      setLoadingState("loading");
+      setError(null);
+
       try {
-        setError(null);
         const [companiesData, postsData] = await Promise.all([
           fetchCompanies(),
           fetchPosts()
         ]);
         setCompanies(companiesData);
         setPosts(postsData);
+        setLoadingState("success");
       } catch (error) {
         console.error("데이터 로딩 실패:", error);
-        setError("데이터를 불러오는 중 오류가 발생했습니다.");
-      } finally {
-        setLoading(false);
+        setError(
+          error instanceof Error
+            ? error.message
+            : "데이터를 불러오는 중 오류가 발생했습니다."
+        );
+        setLoadingState("error");
       }
     };
 
     loadData();
-  }, []);
+  }, [setLoadingState, setError]);
 
   // 회사별 최신 배출량 데이터
   const companyEmissionsData: CompanyEmissionsData[] = companies.map(
@@ -111,7 +118,7 @@ export default function ReportsPage() {
     ).length
   };
 
-  if (loading) {
+  if (loadingState === "loading") {
     return (
       <SkeletonPageLayout
         title="보고서 관리"
@@ -152,8 +159,13 @@ export default function ReportsPage() {
     );
   }
 
-  if (error) {
-    return <ErrorState message={error} />;
+  if (loadingState === "error") {
+    return (
+      <ErrorState
+        message={error || "데이터를 불러오는 중 오류가 발생했습니다."}
+        onRetry={() => window.location.reload()}
+      />
+    );
   }
 
   return (

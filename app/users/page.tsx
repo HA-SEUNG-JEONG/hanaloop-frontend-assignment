@@ -42,13 +42,12 @@ import { UsersFilters } from "./components/UsersFilters";
 import { UsersDistributionCharts } from "./components/UsersDistributionCharts";
 import { fetchUsers } from "@/lib/api";
 import { User, UserFilter, UserStats } from "../types";
-
-type LoadingState = "idle" | "loading" | "success" | "error";
+import { useLoadingState } from "@/lib/hooks/useLoadingState";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
-  const [loadingState, setLoadingState] = useState<LoadingState>("loading");
-  const [error, setError] = useState<string | null>(null);
+  const { loadingState, error, setLoadingState, setError } =
+    useLoadingState("loading");
   const [filter, setFilter] = useState<UserFilter>({
     search: "",
     role: "all",
@@ -56,25 +55,28 @@ export default function UsersPage() {
     country: "all"
   });
 
-  // 사용자 데이터 로드
-  const loadUsers = async () => {
-    setLoadingState("loading");
-    setError(null);
+  useEffect(() => {
+    const loadUsers = async () => {
+      setLoadingState("loading");
+      setError(null);
 
-    try {
-      const usersData = await fetchUsers();
-      setUsers(usersData);
-      setLoadingState("success");
-    } catch (error) {
-      console.error("사용자 데이터 로딩 실패:", error);
-      setError(
-        error instanceof Error
-          ? error.message
-          : "사용자 데이터를 불러오는 중 오류가 발생했습니다."
-      );
-      setLoadingState("error");
-    }
-  };
+      try {
+        const usersData = await fetchUsers();
+        setUsers(usersData);
+        setLoadingState("success");
+      } catch (error) {
+        console.error("사용자 데이터 로딩 실패:", error);
+        setError(
+          error instanceof Error
+            ? error.message
+            : "사용자 데이터를 불러오는 중 오류가 발생했습니다."
+        );
+        setLoadingState("error");
+      }
+    };
+
+    loadUsers();
+  }, [setLoadingState, setError]);
 
   // 필터링된 사용자 목록 (useMemo는 필터링 로직이 복잡하므로 필요)
   const filteredUsers = useMemo(() => {
@@ -132,10 +134,6 @@ export default function UsersPage() {
   const availableCountries = useMemo(() => {
     return Array.from(new Set(users.map((user) => user.country))).sort();
   }, [users]);
-
-  useEffect(() => {
-    loadUsers();
-  }, []);
 
   const handleAddUser = () => {
     // TODO: 사용자 추가 모달 또는 페이지로 이동
@@ -196,7 +194,7 @@ export default function UsersPage() {
     return (
       <ErrorState
         message={error || "사용자 데이터를 불러오는 중 오류가 발생했습니다."}
-        onRetry={loadUsers}
+        onRetry={() => window.location.reload()}
       />
     );
   }

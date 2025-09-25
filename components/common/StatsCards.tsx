@@ -24,7 +24,6 @@ export interface StatCardData {
     label: string;
     isPositive?: boolean;
   };
-  isLoading?: boolean;
   isRealtime?: boolean; // 실시간 업데이트 여부
   animationDelay?: number; // 애니메이션 지연 시간
 }
@@ -36,21 +35,6 @@ interface StatsCardsProps {
 // 개별 통계 카드 컴포넌트
 function StatCard({ stat, index }: { stat: StatCardData; index: number }) {
   const IconComponent = stat.icon;
-
-  if (stat.isLoading) {
-    return (
-      <Card className="animate-pulse">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <div className="h-4 bg-muted rounded w-24"></div>
-          <div className="h-4 w-4 bg-muted rounded"></div>
-        </CardHeader>
-        <CardContent>
-          <div className="h-8 bg-muted rounded w-16 mb-2"></div>
-          <div className="h-3 bg-muted rounded w-20"></div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
     <Card

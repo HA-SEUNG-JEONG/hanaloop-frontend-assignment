@@ -6,15 +6,9 @@ interface StatsGridProps {
   countries: Country[];
   companies: Company[];
   posts: Post[];
-  isLoading?: boolean;
 }
 
-export function StatsGrid({
-  countries,
-  companies,
-  posts,
-  isLoading = false
-}: StatsGridProps) {
+export function StatsGrid({ countries, companies, posts }: StatsGridProps) {
   const totalEmissions = countries.reduce(
     (sum, country) => sum + country.emissions,
     0
@@ -39,7 +33,6 @@ export function StatsGrid({
         label: "전년 대비 증가",
         isPositive: false
       },
-      isLoading,
       isRealtime: true,
       animationDelay: 0
     },
@@ -53,7 +46,6 @@ export function StatsGrid({
         label: "전년 대비 감소",
         isPositive: true
       },
-      isLoading,
       isRealtime: true,
       animationDelay: 100
     },
@@ -67,7 +59,6 @@ export function StatsGrid({
         label: "신규 등록",
         isPositive: true
       },
-      isLoading,
       isRealtime: false,
       animationDelay: 200
     },
@@ -81,7 +72,6 @@ export function StatsGrid({
         label: "이번 달 작성",
         isPositive: true
       },
-      isLoading,
       isRealtime: false,
       animationDelay: 300
     }

@@ -17,6 +17,7 @@
 import { useEffect, useState } from "react";
 import { fetchCountries } from "@/lib/api";
 import { Country } from "../types";
+import { useLoadingState } from "@/lib/hooks/useLoadingState";
 import { ErrorState } from "@/components/common/ErrorState";
 import {
   SkeletonPageLayout,
@@ -35,25 +36,31 @@ import {
 
 export default function AnalyticsPage() {
   const [countries, setCountries] = useState<Country[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const loadData = async () => {
-    try {
-      setError(null);
-      const countriesData = await fetchCountries();
-      setCountries(countriesData);
-    } catch (error) {
-      console.error("데이터 로딩 실패:", error);
-      setError("데이터를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { loadingState, error, setLoadingState, setError } =
+    useLoadingState("loading");
 
   useEffect(() => {
+    const loadData = async () => {
+      setLoadingState("loading");
+      setError(null);
+
+      try {
+        const countriesData = await fetchCountries();
+        setCountries(countriesData);
+        setLoadingState("success");
+      } catch (error) {
+        console.error("데이터 로딩 실패:", error);
+        setError(
+          error instanceof Error
+            ? error.message
+            : "데이터를 불러오는 중 오류가 발생했습니다."
+        );
+        setLoadingState("error");
+      }
+    };
+
     loadData();
-  }, []);
+  }, [setLoadingState, setError]);
 
   // 데이터 처리 - 단순한 계산이므로 메모이제이션 불필요 (룰 6번)
 
@@ -77,12 +84,10 @@ export default function AnalyticsPage() {
   const pieChartData = createPieChartData(countries);
 
   const handleRetry = () => {
-    setLoading(true);
-    setError(null);
-    loadData();
+    window.location.reload();
   };
 
-  if (loading) {
+  if (loadingState === "loading") {
     return (
       <SkeletonPageLayout
         title="분석 대시보드"
@@ -110,8 +115,13 @@ export default function AnalyticsPage() {
     );
   }
 
-  if (error) {
-    return <ErrorState message={error} onRetry={handleRetry} />;
+  if (loadingState === "error") {
+    return (
+      <ErrorState
+        message={error || "데이터를 불러오는 중 오류가 발생했습니다."}
+        onRetry={handleRetry}
+      />
+    );
   }
 
   return (

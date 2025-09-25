@@ -204,3 +204,52 @@ export function SkeletonNotificationItem({
     </div>
   );
 }
+
+// 추가적인 스켈레톤 컴포넌트들
+export function SkeletonButton({
+  className,
+  size = "default"
+}: {
+  className?: string;
+  size?: "sm" | "default" | "lg";
+}) {
+  const sizeClasses = {
+    sm: "h-8 w-20",
+    default: "h-10 w-24",
+    lg: "h-12 w-32"
+  };
+
+  return <Skeleton className={`${sizeClasses[size]} ${className || ""}`} />;
+}
+
+export function SkeletonInput({ className }: { className?: string }) {
+  return <Skeleton className={`h-10 w-full ${className || ""}`} />;
+}
+
+export function SkeletonSelect({ className }: { className?: string }) {
+  return <Skeleton className={`h-10 w-32 ${className || ""}`} />;
+}
+
+export function SkeletonBadge({ className }: { className?: string }) {
+  return <Skeleton className={`h-6 w-16 rounded-full ${className || ""}`} />;
+}
+
+export function SkeletonAvatar({
+  size = "default",
+  className
+}: {
+  size?: "sm" | "default" | "lg";
+  className?: string;
+}) {
+  const sizeClasses = {
+    sm: "h-8 w-8",
+    default: "h-10 w-10",
+    lg: "h-12 w-12"
+  };
+
+  return (
+    <Skeleton
+      className={`${sizeClasses[size]} rounded-full ${className || ""}`}
+    />
+  );
+}
