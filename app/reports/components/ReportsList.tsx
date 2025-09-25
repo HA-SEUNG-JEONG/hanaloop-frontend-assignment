@@ -19,16 +19,6 @@ import {
 } from "@/lib/helpers/reportUtils";
 import { deletePost } from "@/lib/api";
 import { Input } from "@/components/ui/input";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle
-} from "@/components/ui/alert-dialog";
 import { Search, Trash2 } from "lucide-react";
 
 interface ReportsListProps {
@@ -44,11 +34,10 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts);
+  const [isSearching, setIsSearching] = useState(false);
   const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(
     null
   );
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [postToDelete, setPostToDelete] = useState<Post | null>(null);
 
   const handleViewReport = (post: Post) => {
     const company = companies.find((c) => c.id === post.resourceId);
@@ -99,8 +88,11 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
 
     if (query.trim() === "") {
       setFilteredPosts(posts);
+      setIsSearching(false);
       return;
     }
+
+    setIsSearching(true);
 
     // 300ms 디바운싱
     const timeout = setTimeout(() => {
@@ -110,27 +102,20 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
       );
 
       setFilteredPosts(searchResults);
+      setIsSearching(false);
     }, 300);
 
     setSearchTimeout(timeout);
   };
 
-  // 보고서 삭제 확인
-  const handleDeleteClick = (post: Post) => {
-    setPostToDelete(post);
-    setIsDeleteDialogOpen(true);
-  };
-
-  // 보고서 삭제 실행
-  const handleDeleteConfirm = async () => {
-    if (!postToDelete) return;
+  // 보고서 삭제
+  const handleDeleteReport = async (postId: string) => {
+    if (!confirm("정말로 이 보고서를 삭제하시겠습니까?")) {
+      return;
+    }
 
     try {
-      await deletePost(postToDelete.id);
-
-      setIsDeleteDialogOpen(false);
-      setPostToDelete(null);
-
+      await deletePost(postId);
       onRefresh?.();
     } catch (error) {
       console.error("보고서 삭제 실패:", error);
@@ -138,23 +123,10 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
     }
   };
 
-  // 삭제 취소
-  const handleDeleteCancel = () => {
-    setIsDeleteDialogOpen(false);
-    setPostToDelete(null);
-  };
-
   // posts가 변경될 때 filteredPosts 업데이트
   useEffect(() => {
     if (searchQuery.trim() === "") {
       setFilteredPosts(posts);
-    } else {
-      // 검색어가 있을 때도 새로운 posts에 대해 검색 실행
-      const lowerQuery = searchQuery.toLowerCase();
-      const searchResults = posts.filter((post) =>
-        post.title.toLowerCase().includes(lowerQuery)
-      );
-      setFilteredPosts(searchResults);
     }
   }, [posts, searchQuery]);
 
@@ -219,12 +191,16 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="보고서 제목으로 검색..."
+                placeholder="보고서 제목이나 내용으로 검색..."
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
                 className="pl-10"
+                disabled={isSearching}
               />
             </div>
+            {isSearching && (
+              <p className="text-sm text-muted-foreground mt-2">검색 중...</p>
+            )}
           </div>
         </CardHeader>
         <CardContent>
@@ -294,7 +270,7 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleDeleteClick(post)}
+                        onClick={() => handleDeleteReport(post.id)}
                         className="text-red-600 hover:text-red-700 hover:bg-red-50"
                       >
                         <Trash2 className="h-4 w-4 mr-1" />
@@ -332,40 +308,6 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
           handleEditReport(selectedReport!);
         }}
       />
-
-      {/* 삭제 확인 모달 */}
-      <AlertDialog
-        open={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>보고서 삭제</AlertDialogTitle>
-            <AlertDialogDescription>
-              정말로 이 보고서를 삭제하시겠습니까?
-              <br />
-              <br />
-              <strong>제목:</strong> {postToDelete?.title}
-              <br />
-              <strong>기업:</strong>{" "}
-              {companies.find((c) => c.id === postToDelete?.resourceId)?.name}
-              <br />
-              <br />이 작업은 되돌릴 수 없습니다.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleDeleteCancel}>
-              취소
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteConfirm}
-              className="bg-red-600 hover:bg-red-700"
-            >
-              삭제
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </>
   );
 }

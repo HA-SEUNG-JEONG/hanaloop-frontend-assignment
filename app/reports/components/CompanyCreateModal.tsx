@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   Dialog,
   DialogContent,
@@ -24,6 +27,40 @@ import { createCompany } from "@/lib/api";
 import { useLoadingState } from "@/lib/hooks/useLoadingState";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 
+// Zod 스키마 정의
+const companySchema = z.object({
+  name: z
+    .string()
+    .min(1, "회사명을 입력해주세요")
+    .max(100, "회사명은 100자 이하로 입력해주세요"),
+  country: z.string().min(1, "국가를 선택해주세요"),
+  businessType: z.string().min(1, "사업 유형을 선택해주세요"),
+  industry: z.string().min(1, "산업 분야를 선택해주세요"),
+  establishedYear: z
+    .string()
+    .min(1, "설립년도를 입력해주세요")
+    .refine((val) => {
+      const year = parseInt(val);
+      return year >= 1800 && year <= new Date().getFullYear();
+    }, "올바른 설립년도를 입력해주세요"),
+  employeeCount: z
+    .string()
+    .min(1, "직원 수를 입력해주세요")
+    .refine((val) => {
+      const count = parseInt(val);
+      return count >= 1 && count <= 10000000;
+    }, "직원 수는 1명 이상 10,000,000명 이하로 입력해주세요"),
+  revenue: z
+    .string()
+    .min(1, "연매출을 입력해주세요")
+    .refine((val) => {
+      const revenue = parseFloat(val);
+      return revenue >= 0 && revenue <= 1000000;
+    }, "연매출은 0억원 이상 1,000,000억원 이하로 입력해주세요")
+});
+
+type CompanyFormData = z.infer<typeof companySchema>;
+
 interface CompanyCreateModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -35,210 +72,54 @@ export function CompanyCreateModal({
   onClose,
   onSuccess
 }: CompanyCreateModalProps) {
-  const [formData, setFormData] = useState({
-    name: "",
-    country: "",
-    businessType: "",
-    industry: "",
-    establishedYear: "",
-    employeeCount: "",
-    revenue: ""
-  });
-
-  const [validationErrors, setValidationErrors] = useState<{
-    name?: string;
-    country?: string;
-    businessType?: string;
-    industry?: string;
-    establishedYear?: string;
-    employeeCount?: string;
-    revenue?: string;
-  }>({});
-
   const { loadingState, error, setLoadingState, setError } =
     useLoadingState("idle");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    reset,
+    watch,
+    setValue
+  } = useForm<CompanyFormData>({
+    resolver: zodResolver(companySchema),
+    mode: "onChange",
+    defaultValues: {
+      name: "",
+      country: "",
+      businessType: "",
+      industry: "",
+      establishedYear: "",
+      employeeCount: "",
+      revenue: ""
+    }
+  });
+
+  const watchedValues = watch();
 
   // 폼 초기화
   useEffect(() => {
     if (isOpen) {
-      setFormData({
-        name: "",
-        country: "",
-        businessType: "",
-        industry: "",
-        establishedYear: "",
-        employeeCount: "",
-        revenue: ""
-      });
-      setValidationErrors({});
+      reset();
       setError(null);
     }
-  }, [isOpen]);
+  }, [isOpen, reset, setError]);
 
-  // 유효성 검증 함수
-  const validateForm = () => {
-    const errors: typeof validationErrors = {};
-
-    // 회사명 검증
-    if (!formData.name.trim()) {
-      errors.name = "회사명을 입력해주세요.";
-    } else if (formData.name.trim().length < 2) {
-      errors.name = "회사명은 최소 2자 이상이어야 합니다.";
-    } else if (formData.name.trim().length > 100) {
-      errors.name = "회사명은 100자를 초과할 수 없습니다.";
-    }
-
-    // 국가 검증
-    if (!formData.country) {
-      errors.country = "국가를 선택해주세요.";
-    }
-
-    // 사업 유형 검증
-    if (!formData.businessType) {
-      errors.businessType = "사업 유형을 선택해주세요.";
-    }
-
-    // 산업 분야 검증
-    if (!formData.industry) {
-      errors.industry = "산업 분야를 선택해주세요.";
-    }
-
-    // 설립년도 검증
-    if (!formData.establishedYear) {
-      errors.establishedYear = "설립년도를 입력해주세요.";
-    } else {
-      const year = parseInt(formData.establishedYear);
-      const currentYear = new Date().getFullYear();
-      if (isNaN(year) || year < 1800 || year > currentYear) {
-        errors.establishedYear = `설립년도는 1800년부터 ${currentYear}년 사이여야 합니다.`;
-      }
-    }
-
-    // 직원 수 검증
-    if (!formData.employeeCount) {
-      errors.employeeCount = "직원 수를 입력해주세요.";
-    } else {
-      const count = parseInt(formData.employeeCount);
-      if (isNaN(count) || count < 1 || count > 10000000) {
-        errors.employeeCount = "직원 수는 1명 이상 1천만 명 이하여야 합니다.";
-      }
-    }
-
-    // 연매출 검증
-    if (!formData.revenue) {
-      errors.revenue = "연매출을 입력해주세요.";
-    } else {
-      const revenue = parseFloat(formData.revenue);
-      if (isNaN(revenue) || revenue < 0 || revenue > 1000000) {
-        errors.revenue = "연매출은 0억원 이상 100만억원 이하여야 합니다.";
-      }
-    }
-
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  // 실시간 유효성 검증
-  const validateField = (field: keyof typeof formData, value: string) => {
-    const errors = { ...validationErrors };
-
-    switch (field) {
-      case "name":
-        if (!value.trim()) {
-          errors.name = "회사명을 입력해주세요.";
-        } else if (value.trim().length < 2) {
-          errors.name = "회사명은 최소 2자 이상이어야 합니다.";
-        } else if (value.trim().length > 100) {
-          errors.name = "회사명은 100자를 초과할 수 없습니다.";
-        } else {
-          delete errors.name;
-        }
-        break;
-      case "country":
-        if (!value) {
-          errors.country = "국가를 선택해주세요.";
-        } else {
-          delete errors.country;
-        }
-        break;
-      case "businessType":
-        if (!value) {
-          errors.businessType = "사업 유형을 선택해주세요.";
-        } else {
-          delete errors.businessType;
-        }
-        break;
-      case "industry":
-        if (!value) {
-          errors.industry = "산업 분야를 선택해주세요.";
-        } else {
-          delete errors.industry;
-        }
-        break;
-      case "establishedYear":
-        if (!value) {
-          errors.establishedYear = "설립년도를 입력해주세요.";
-        } else {
-          const year = parseInt(value);
-          const currentYear = new Date().getFullYear();
-          if (isNaN(year) || year < 1800 || year > currentYear) {
-            errors.establishedYear = `설립년도는 1800년부터 ${currentYear}년 사이여야 합니다.`;
-          } else {
-            delete errors.establishedYear;
-          }
-        }
-        break;
-      case "employeeCount":
-        if (!value) {
-          errors.employeeCount = "직원 수를 입력해주세요.";
-        } else {
-          const count = parseInt(value);
-          if (isNaN(count) || count < 1 || count > 10000000) {
-            errors.employeeCount =
-              "직원 수는 1명 이상 1천만 명 이하여야 합니다.";
-          } else {
-            delete errors.employeeCount;
-          }
-        }
-        break;
-      case "revenue":
-        if (!value) {
-          errors.revenue = "연매출을 입력해주세요.";
-        } else {
-          const revenue = parseFloat(value);
-          if (isNaN(revenue) || revenue < 0 || revenue > 1000000) {
-            errors.revenue = "연매출은 0억원 이상 100만억원 이하여야 합니다.";
-          } else {
-            delete errors.revenue;
-          }
-        }
-        break;
-    }
-
-    setValidationErrors(errors);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // 유효성 검증
-    if (!validateForm()) {
-      setError("입력 정보를 확인해주세요.");
-      return;
-    }
-
+  // 폼 제출 핸들러
+  const onSubmit = async (data: CompanyFormData) => {
     setLoadingState("loading");
     setError(null);
 
     try {
       await createCompany({
-        name: formData.name.trim(),
-        country: formData.country,
-        businessType: formData.businessType,
-        industry: formData.industry,
-        establishedYear: parseInt(formData.establishedYear),
-        employeeCount: parseInt(formData.employeeCount),
-        revenue: parseFloat(formData.revenue),
+        name: data.name.trim(),
+        country: data.country,
+        businessType: data.businessType,
+        industry: data.industry,
+        establishedYear: parseInt(data.establishedYear),
+        employeeCount: parseInt(data.employeeCount),
+        revenue: parseFloat(data.revenue),
         subsidiaries: [],
         emissions: []
       });
@@ -273,30 +154,24 @@ export function CompanyCreateModal({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">회사명 *</Label>
               <Input
                 id="name"
-                value={formData.name}
-                onChange={(e) => {
-                  setFormData((prev) => ({ ...prev, name: e.target.value }));
-                  validateField("name", e.target.value);
-                }}
+                {...register("name")}
                 placeholder="회사명을 입력하세요"
                 disabled={loadingState === "loading"}
-                className={validationErrors.name ? "border-red-500" : ""}
+                className={errors.name ? "border-red-500" : ""}
                 maxLength={100}
               />
               <div className="flex justify-between items-center">
-                {validationErrors.name ? (
-                  <p className="text-sm text-red-600">
-                    {validationErrors.name}
-                  </p>
+                {errors.name ? (
+                  <p className="text-sm text-red-600">{errors.name.message}</p>
                 ) : (
                   <p className="text-sm text-muted-foreground">
-                    {formData.name.length}/100자
+                    {watchedValues.name?.length || 0}/100자
                   </p>
                 )}
               </div>
@@ -305,15 +180,12 @@ export function CompanyCreateModal({
             <div className="space-y-2">
               <Label htmlFor="country">국가 *</Label>
               <Select
-                value={formData.country}
-                onValueChange={(value) => {
-                  setFormData((prev) => ({ ...prev, country: value }));
-                  validateField("country", value);
-                }}
+                value={watchedValues.country}
+                onValueChange={(value) => setValue("country", value)}
                 disabled={loadingState === "loading"}
               >
                 <SelectTrigger
-                  className={validationErrors.country ? "border-red-500" : ""}
+                  className={errors.country ? "border-red-500" : ""}
                 >
                   <SelectValue placeholder="국가를 선택하세요" />
                 </SelectTrigger>
@@ -330,10 +202,8 @@ export function CompanyCreateModal({
                   <SelectItem value="CA">캐나다 (CA)</SelectItem>
                 </SelectContent>
               </Select>
-              {validationErrors.country && (
-                <p className="text-sm text-red-600">
-                  {validationErrors.country}
-                </p>
+              {errors.country && (
+                <p className="text-sm text-red-600">{errors.country.message}</p>
               )}
             </div>
           </div>
@@ -342,17 +212,12 @@ export function CompanyCreateModal({
             <div className="space-y-2">
               <Label htmlFor="businessType">사업 유형 *</Label>
               <Select
-                value={formData.businessType}
-                onValueChange={(value) => {
-                  setFormData((prev) => ({ ...prev, businessType: value }));
-                  validateField("businessType", value);
-                }}
+                value={watchedValues.businessType}
+                onValueChange={(value) => setValue("businessType", value)}
                 disabled={loadingState === "loading"}
               >
                 <SelectTrigger
-                  className={
-                    validationErrors.businessType ? "border-red-500" : ""
-                  }
+                  className={errors.businessType ? "border-red-500" : ""}
                 >
                   <SelectValue placeholder="사업 유형을 선택하세요" />
                 </SelectTrigger>
@@ -369,9 +234,9 @@ export function CompanyCreateModal({
                   <SelectItem value="기타">기타</SelectItem>
                 </SelectContent>
               </Select>
-              {validationErrors.businessType && (
+              {errors.businessType && (
                 <p className="text-sm text-red-600">
-                  {validationErrors.businessType}
+                  {errors.businessType.message}
                 </p>
               )}
             </div>
@@ -379,15 +244,12 @@ export function CompanyCreateModal({
             <div className="space-y-2">
               <Label htmlFor="industry">산업 분야 *</Label>
               <Select
-                value={formData.industry}
-                onValueChange={(value) => {
-                  setFormData((prev) => ({ ...prev, industry: value }));
-                  validateField("industry", value);
-                }}
+                value={watchedValues.industry}
+                onValueChange={(value) => setValue("industry", value)}
                 disabled={loadingState === "loading"}
               >
                 <SelectTrigger
-                  className={validationErrors.industry ? "border-red-500" : ""}
+                  className={errors.industry ? "border-red-500" : ""}
                 >
                   <SelectValue placeholder="산업 분야를 선택하세요" />
                 </SelectTrigger>
@@ -407,9 +269,9 @@ export function CompanyCreateModal({
                   <SelectItem value="기타">기타</SelectItem>
                 </SelectContent>
               </Select>
-              {validationErrors.industry && (
+              {errors.industry && (
                 <p className="text-sm text-red-600">
-                  {validationErrors.industry}
+                  {errors.industry.message}
                 </p>
               )}
             </div>
@@ -423,23 +285,14 @@ export function CompanyCreateModal({
                 type="number"
                 min="1800"
                 max={new Date().getFullYear()}
-                value={formData.establishedYear}
-                onChange={(e) => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    establishedYear: e.target.value
-                  }));
-                  validateField("establishedYear", e.target.value);
-                }}
+                {...register("establishedYear")}
                 placeholder="예: 1995"
                 disabled={loadingState === "loading"}
-                className={
-                  validationErrors.establishedYear ? "border-red-500" : ""
-                }
+                className={errors.establishedYear ? "border-red-500" : ""}
               />
-              {validationErrors.establishedYear && (
+              {errors.establishedYear && (
                 <p className="text-sm text-red-600">
-                  {validationErrors.establishedYear}
+                  {errors.establishedYear.message}
                 </p>
               )}
             </div>
@@ -451,23 +304,14 @@ export function CompanyCreateModal({
                 type="number"
                 min="1"
                 max="10000000"
-                value={formData.employeeCount}
-                onChange={(e) => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    employeeCount: e.target.value
-                  }));
-                  validateField("employeeCount", e.target.value);
-                }}
+                {...register("employeeCount")}
                 placeholder="예: 1000"
                 disabled={loadingState === "loading"}
-                className={
-                  validationErrors.employeeCount ? "border-red-500" : ""
-                }
+                className={errors.employeeCount ? "border-red-500" : ""}
               />
-              {validationErrors.employeeCount && (
+              {errors.employeeCount && (
                 <p className="text-sm text-red-600">
-                  {validationErrors.employeeCount}
+                  {errors.employeeCount.message}
                 </p>
               )}
             </div>
@@ -480,19 +324,13 @@ export function CompanyCreateModal({
                 min="0"
                 max="1000000"
                 step="0.1"
-                value={formData.revenue}
-                onChange={(e) => {
-                  setFormData((prev) => ({ ...prev, revenue: e.target.value }));
-                  validateField("revenue", e.target.value);
-                }}
+                {...register("revenue")}
                 placeholder="예: 1000"
                 disabled={loadingState === "loading"}
-                className={validationErrors.revenue ? "border-red-500" : ""}
+                className={errors.revenue ? "border-red-500" : ""}
               />
-              {validationErrors.revenue && (
-                <p className="text-sm text-red-600">
-                  {validationErrors.revenue}
-                </p>
+              {errors.revenue && (
+                <p className="text-sm text-red-600">{errors.revenue.message}</p>
               )}
             </div>
           </div>
@@ -514,16 +352,7 @@ export function CompanyCreateModal({
             </Button>
             <Button
               type="submit"
-              disabled={
-                loadingState === "loading" ||
-                !formData.name.trim() ||
-                !formData.country ||
-                !formData.businessType ||
-                !formData.industry ||
-                !formData.establishedYear ||
-                !formData.employeeCount ||
-                !formData.revenue
-              }
+              disabled={loadingState === "loading" || !isValid}
             >
               {loadingState === "loading" ? (
                 <>
