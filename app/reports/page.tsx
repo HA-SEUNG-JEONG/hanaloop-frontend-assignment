@@ -68,6 +68,9 @@ export default function ReportsPage() {
         id: company.id,
         name: company.name,
         country: company.country,
+        businessType: company.businessType,
+        industry: company.industry,
+        subsidiaryCount: company.subsidiaries.length,
         latestEmissions: latestEmission?.emissions || 0,
         change: change,
         emissions: company.emissions
@@ -164,7 +167,17 @@ export default function ReportsPage() {
           companyEmissionsData={companyEmissionsData}
           timeSeriesData={timeSeriesData}
         />
-        <CompaniesTable companyEmissionsData={companyEmissionsData} />
+        <CompaniesTable
+          companyEmissionsData={companyEmissionsData}
+          onViewDetails={(companyId) => {
+            console.log("상세보기:", companyId);
+            // TODO: 상세보기 모달 또는 페이지로 이동
+          }}
+          onEdit={(companyId) => {
+            console.log("편집:", companyId);
+            // TODO: 편집 모달 또는 페이지로 이동
+          }}
+        />
         <ReportsList posts={posts} companies={companies} />
       </div>
     </div>

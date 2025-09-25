@@ -143,6 +143,51 @@ export async function fetchCompanies() {
   await delay(jitter());
   return _companies;
 }
+
+// 특정 회사의 계열사 목록 조회
+export async function fetchSubsidiaries(companyId: string) {
+  await delay(jitter());
+  if (maybeFail())
+    throw new Error("계열사 정보를 불러오는 중 오류가 발생했습니다.");
+
+  const company = _companies.find((c) => c.id === companyId);
+  if (!company) {
+    throw new Error("회사를 찾을 수 없습니다.");
+  }
+
+  return company.subsidiaries;
+}
+
+// 회사별 총 배출량 계산 (본사 + 계열사)
+export async function fetchCompanyTotalEmissions(companyId: string) {
+  await delay(jitter());
+  if (maybeFail())
+    throw new Error("배출량 정보를 불러오는 중 오류가 발생했습니다.");
+
+  const company = _companies.find((c) => c.id === companyId);
+  if (!company) {
+    throw new Error("회사를 찾을 수 없습니다.");
+  }
+
+  // 본사 배출량과 계열사 배출량을 합산
+  const allEmissions = [
+    ...company.emissions,
+    ...company.subsidiaries.flatMap((s) => s.emissions)
+  ];
+
+  // 월별로 그룹화하여 합산
+  const monthlyTotals = allEmissions.reduce((acc, emission) => {
+    const existing = acc.find((e) => e.yearMonth === emission.yearMonth);
+    if (existing) {
+      existing.emissions += emission.emissions;
+    } else {
+      acc.push({ ...emission });
+    }
+    return acc;
+  }, [] as typeof company.emissions);
+
+  return monthlyTotals.sort((a, b) => a.yearMonth.localeCompare(b.yearMonth));
+}
 export async function fetchPosts() {
   await delay(jitter());
   return _posts;

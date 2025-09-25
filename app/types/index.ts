@@ -1,13 +1,33 @@
-type GhgEmission = {
+export type GhgEmission = {
   yearMonth: string; // "2025-01","2025-02"
   source?: string; // gasoline, lpg, diesel, etc
   emissions: number;
 };
 
+// 계열사 정보 타입
+export type Subsidiary = {
+  id: string;
+  name: string;
+  country: string;
+  businessType: string; // 사업 유형 (제조업, 서비스업, 유통업 등)
+  ownershipPercentage: number; // 지분율 (0-100)
+  establishedYear: number;
+  employeeCount: number;
+  emissions: GhgEmission[];
+};
+
+// 회사 정보 타입
 export type Company = {
   id: string;
   name: string;
   country: string;
+  businessType: string; // 사업 유형
+  industry: string; // 산업 분야
+  establishedYear: number;
+  employeeCount: number;
+  revenue: number; // 연매출 (억원)
+  parentCompanyId?: string; // 모회사 ID (계열사인 경우)
+  subsidiaries: Subsidiary[]; // 계열사 목록
   emissions: GhgEmission[]; // 회사 및 계열사의 배출량
 };
 
@@ -33,6 +53,9 @@ export type CompanyEmissionsData = {
   id: string;
   name: string;
   country: string;
+  businessType: string;
+  industry: string;
+  subsidiaryCount: number; // 계열사 수
   latestEmissions: number;
   change: number;
   emissions: GhgEmission[];

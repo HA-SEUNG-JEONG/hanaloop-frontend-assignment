@@ -1,33 +1,215 @@
-import { Company, Post, Country } from "./types";
+import { Company, Post, Country, Subsidiary } from "./types";
 
 export const companies: Company[] = [
   {
     id: "c1",
-    name: "Acme Corp",
-    country: "US",
-    emissions: [
-      { yearMonth: "2024-01", emissions: 120 },
+    name: "삼성전자",
+    country: "KR",
+    businessType: "제조업",
+    industry: "전자제품",
+    establishedYear: 1969,
+    employeeCount: 267937,
+    revenue: 2790000, // 279조원
+    subsidiaries: [
       {
-        yearMonth: "2024-02",
-        emissions: 110
+        id: "s1",
+        name: "삼성디스플레이",
+        country: "KR",
+        businessType: "제조업",
+        ownershipPercentage: 84.8,
+        establishedYear: 2012,
+        employeeCount: 25000,
+        emissions: [
+          { yearMonth: "2024-01", emissions: 45 },
+          { yearMonth: "2024-02", emissions: 42 },
+          { yearMonth: "2024-03", emissions: 48 }
+        ]
       },
       {
-        yearMonth: "2024-03",
-        emissions: 95
+        id: "s2",
+        name: "삼성SDI",
+        country: "KR",
+        businessType: "제조업",
+        ownershipPercentage: 20.7,
+        establishedYear: 1970,
+        employeeCount: 30000,
+        emissions: [
+          { yearMonth: "2024-01", emissions: 35 },
+          { yearMonth: "2024-02", emissions: 38 },
+          { yearMonth: "2024-03", emissions: 32 }
+        ]
       }
+    ],
+    emissions: [
+      { yearMonth: "2024-01", emissions: 120 },
+      { yearMonth: "2024-02", emissions: 110 },
+      { yearMonth: "2024-03", emissions: 95 }
     ]
   },
   {
     id: "c2",
-    name: "Globex",
-    country: "DE",
+    name: "LG전자",
+    country: "KR",
+    businessType: "제조업",
+    industry: "전자제품",
+    establishedYear: 1958,
+    employeeCount: 51000,
+    revenue: 742000, // 74.2조원
+    subsidiaries: [
+      {
+        id: "s3",
+        name: "LG디스플레이",
+        country: "KR",
+        businessType: "제조업",
+        ownershipPercentage: 81.9,
+        establishedYear: 1999,
+        employeeCount: 20000,
+        emissions: [
+          { yearMonth: "2024-01", emissions: 28 },
+          { yearMonth: "2024-02", emissions: 25 },
+          { yearMonth: "2024-03", emissions: 30 }
+        ]
+      },
+      {
+        id: "s4",
+        name: "LG화학",
+        country: "KR",
+        businessType: "제조업",
+        ownershipPercentage: 0, // 별도 상장사
+        establishedYear: 1947,
+        employeeCount: 18000,
+        emissions: [
+          { yearMonth: "2024-01", emissions: 55 },
+          { yearMonth: "2024-02", emissions: 58 },
+          { yearMonth: "2024-03", emissions: 52 }
+        ]
+      }
+    ],
     emissions: [
       { yearMonth: "2024-01", emissions: 80 },
-      {
-        yearMonth: "2024-02",
-        emissions: 105
-      },
+      { yearMonth: "2024-02", emissions: 105 },
       { yearMonth: "2024-03", emissions: 120 }
+    ]
+  },
+  {
+    id: "c3",
+    name: "현대자동차",
+    country: "KR",
+    businessType: "제조업",
+    industry: "자동차",
+    establishedYear: 1967,
+    employeeCount: 120000,
+    revenue: 1180000, // 118조원
+    subsidiaries: [
+      {
+        id: "s5",
+        name: "기아",
+        country: "KR",
+        businessType: "제조업",
+        ownershipPercentage: 33.9,
+        establishedYear: 1944,
+        employeeCount: 52000,
+        emissions: [
+          { yearMonth: "2024-01", emissions: 65 },
+          { yearMonth: "2024-02", emissions: 68 },
+          { yearMonth: "2024-03", emissions: 62 }
+        ]
+      },
+      {
+        id: "s6",
+        name: "현대모비스",
+        country: "KR",
+        businessType: "제조업",
+        ownershipPercentage: 20.8,
+        establishedYear: 1977,
+        employeeCount: 30000,
+        emissions: [
+          { yearMonth: "2024-01", emissions: 40 },
+          { yearMonth: "2024-02", emissions: 42 },
+          { yearMonth: "2024-03", emissions: 38 }
+        ]
+      }
+    ],
+    emissions: [
+      { yearMonth: "2024-01", emissions: 150 },
+      { yearMonth: "2024-02", emissions: 145 },
+      { yearMonth: "2024-03", emissions: 160 }
+    ]
+  },
+  {
+    id: "c4",
+    name: "SK하이닉스",
+    country: "KR",
+    businessType: "제조업",
+    industry: "반도체",
+    establishedYear: 1983,
+    employeeCount: 35000,
+    revenue: 440000, // 44조원
+    subsidiaries: [
+      {
+        id: "s7",
+        name: "SK실트론",
+        country: "KR",
+        businessType: "제조업",
+        ownershipPercentage: 100,
+        establishedYear: 1989,
+        employeeCount: 2000,
+        emissions: [
+          { yearMonth: "2024-01", emissions: 15 },
+          { yearMonth: "2024-02", emissions: 18 },
+          { yearMonth: "2024-03", emissions: 16 }
+        ]
+      }
+    ],
+    emissions: [
+      { yearMonth: "2024-01", emissions: 90 },
+      { yearMonth: "2024-02", emissions: 95 },
+      { yearMonth: "2024-03", emissions: 88 }
+    ]
+  },
+  {
+    id: "c5",
+    name: "포스코",
+    country: "KR",
+    businessType: "제조업",
+    industry: "철강",
+    establishedYear: 1968,
+    employeeCount: 40000,
+    revenue: 760000, // 76조원
+    subsidiaries: [
+      {
+        id: "s8",
+        name: "포스코홀딩스",
+        country: "KR",
+        businessType: "지주회사",
+        ownershipPercentage: 100,
+        establishedYear: 2000,
+        employeeCount: 500,
+        emissions: [
+          { yearMonth: "2024-01", emissions: 5 },
+          { yearMonth: "2024-02", emissions: 5 },
+          { yearMonth: "2024-03", emissions: 5 }
+        ]
+      },
+      {
+        id: "s9",
+        name: "포스코케미칼",
+        country: "KR",
+        businessType: "제조업",
+        ownershipPercentage: 100,
+        establishedYear: 1979,
+        employeeCount: 8000,
+        emissions: [
+          { yearMonth: "2024-01", emissions: 25 },
+          { yearMonth: "2024-02", emissions: 28 },
+          { yearMonth: "2024-03", emissions: 26 }
+        ]
+      }
+    ],
+    emissions: [
+      { yearMonth: "2024-01", emissions: 200 },
+      { yearMonth: "2024-02", emissions: 195 },
+      { yearMonth: "2024-03", emissions: 210 }
     ]
   }
 ];
