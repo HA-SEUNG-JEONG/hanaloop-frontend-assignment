@@ -27,7 +27,13 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { LoadingSpinner } from "@/components/common/LoadingSpinner";
+import {
+  SkeletonPageLayout,
+  SkeletonStatsCard,
+  SkeletonCard,
+  SkeletonTable
+} from "@/components/common/SkeletonComponents";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/common/ErrorState";
 import { UsersPageHeader } from "./components/UsersPageHeader";
 import { UsersStatsCards } from "./components/UsersStatsCards";
@@ -147,7 +153,43 @@ export default function UsersPage() {
   };
 
   if (loadingState === "loading") {
-    return <LoadingSpinner message="사용자 데이터를 불러오는 중..." />;
+    return (
+      <SkeletonPageLayout
+        title="사용자 관리"
+        description="시스템 사용자 관리 및 권한 설정"
+      >
+        {/* Stats Cards Skeleton */}
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <SkeletonStatsCard />
+          <SkeletonStatsCard />
+          <SkeletonStatsCard />
+          <SkeletonStatsCard />
+        </section>
+
+        {/* Charts Section Skeleton */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <SkeletonCard>
+            <div className="space-y-4">
+              <Skeleton className="h-6 w-40" />
+              <Skeleton className="h-3 w-32" />
+              <Skeleton className="h-48 w-full" />
+            </div>
+          </SkeletonCard>
+          <SkeletonCard>
+            <div className="space-y-4">
+              <Skeleton className="h-6 w-36" />
+              <Skeleton className="h-3 w-28" />
+              <Skeleton className="h-48 w-full" />
+            </div>
+          </SkeletonCard>
+        </section>
+
+        {/* Users Table Skeleton */}
+        <section>
+          <SkeletonTable rows={10} />
+        </section>
+      </SkeletonPageLayout>
+    );
   }
 
   if (loadingState === "error") {

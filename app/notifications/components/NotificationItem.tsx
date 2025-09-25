@@ -8,7 +8,7 @@ import {
   AlertTriangle,
   Info,
   XCircle,
-  CheckCircle,
+  CheckCircle
 } from "lucide-react";
 import { Notification } from "../../types";
 import {
@@ -18,17 +18,17 @@ import {
   getPriorityName,
   formatRelativeDate,
   getNotificationCardClass,
-  getTitleClass,
+  getTitleClass
 } from "../utils/notificationUtils";
 
 /**
  * 개별 알림 아이템 컴포넌트
- * 
+ *
  * 가정:
  * - 알림 클릭 시 읽음 처리
  * - 삭제 버튼은 항상 표시
  * - 읽지 않은 알림은 시각적으로 구분
- * 
+ *
  * 아키텍처:
  * - memo로 최적화하여 불필요한 리렌더링 방지
  * - Props를 통한 데이터와 액션 전달
@@ -41,7 +41,7 @@ interface NotificationItemProps {
 
 const NotificationIcon = ({ type }: { type: Notification["type"] }) => {
   const iconClass = getNotificationIconClass(type);
-  
+
   switch (type) {
     case "info":
       return <Info className={iconClass} />;
@@ -59,7 +59,7 @@ const NotificationIcon = ({ type }: { type: Notification["type"] }) => {
 export const NotificationItem = memo(function NotificationItem({
   notification,
   onMarkAsRead,
-  onDelete,
+  onDelete
 }: NotificationItemProps) {
   return (
     <Card className={getNotificationCardClass(notification.isRead)}>

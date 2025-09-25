@@ -19,6 +19,12 @@ import { fetchCountries } from "../lib/api";
 import { Country } from "../types";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { ErrorState } from "@/components/common/ErrorState";
+import {
+  SkeletonPageLayout,
+  SkeletonStatsCard,
+  SkeletonTable,
+  SkeletonChart
+} from "@/components/common/SkeletonComponents";
 import { AnalyticsPageHeader } from "./components/AnalyticsPageHeader";
 import { AnalyticsStatsCards } from "./components/AnalyticsStatsCards";
 import { AnalyticsChartsSection } from "./components/AnalyticsChartsSection";
@@ -98,7 +104,31 @@ export default function AnalyticsPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner />;
+    return (
+      <SkeletonPageLayout
+        title="분석 대시보드"
+        description="국가별 배출량 데이터 분석 및 시각화"
+      >
+        {/* Stats Cards Skeleton */}
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <SkeletonStatsCard />
+          <SkeletonStatsCard />
+          <SkeletonStatsCard />
+          <SkeletonStatsCard />
+        </section>
+
+        {/* Charts Section Skeleton */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <SkeletonChart />
+          <SkeletonChart />
+        </section>
+
+        {/* Countries Table Skeleton */}
+        <section>
+          <SkeletonTable rows={10} />
+        </section>
+      </SkeletonPageLayout>
+    );
   }
 
   if (error) {

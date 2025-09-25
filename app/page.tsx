@@ -6,6 +6,13 @@ import { Country, Company, Post } from "./types";
 import { DashboardHeader } from "./dashboard/components/DashboardHeader";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { ErrorState } from "@/components/common/ErrorState";
+import {
+  SkeletonPageLayout,
+  SkeletonStatsCard,
+  SkeletonCard,
+  SkeletonList
+} from "@/components/common/SkeletonComponents";
+import { Skeleton } from "@/components/ui/skeleton";
 import { StatsGrid } from "./dashboard/components/StatsGrid";
 import { TopEmittingCountries } from "./dashboard/components/TopEmittingCountries";
 import { RegionStats } from "./dashboard/components/RegionStats";
@@ -77,7 +84,88 @@ export default function Home() {
   };
 
   if (loadingState === "loading") {
-    return <LoadingSpinner message="대시보드 데이터를 불러오는 중..." />;
+    return (
+      <SkeletonPageLayout
+        title="HanaLoop 배출량 대시보드"
+        description="전 세계 국가별 및 기업별 CO₂ 배출량 모니터링"
+      >
+        {/* Stats Grid Skeleton */}
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <SkeletonStatsCard />
+          <SkeletonStatsCard />
+          <SkeletonStatsCard />
+          <SkeletonStatsCard />
+        </section>
+
+        {/* Charts Section Skeleton */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <SkeletonCard>
+            <div className="space-y-4">
+              <Skeleton className="h-6 w-40" />
+              <Skeleton className="h-3 w-32" />
+              <div className="space-y-3">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <Skeleton className="h-8 w-8 rounded-full" />
+                      <div className="space-y-1">
+                        <Skeleton className="h-4 w-20" />
+                        <Skeleton className="h-3 w-16" />
+                      </div>
+                    </div>
+                    <div className="text-right space-y-1">
+                      <Skeleton className="h-4 w-12" />
+                      <Skeleton className="h-3 w-8" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </SkeletonCard>
+
+          <SkeletonCard>
+            <div className="space-y-4">
+              <Skeleton className="h-6 w-32" />
+              <Skeleton className="h-3 w-40" />
+              <div className="space-y-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-3 w-16" />
+                    </div>
+                    <div className="text-right space-y-1">
+                      <Skeleton className="h-4 w-16" />
+                      <Skeleton className="h-3 w-12" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </SkeletonCard>
+        </section>
+
+        {/* Recent Reports Skeleton */}
+        <section>
+          <SkeletonCard>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-3 w-48" />
+              </div>
+              <SkeletonList items={3} />
+            </div>
+          </SkeletonCard>
+        </section>
+
+        {/* Action Buttons Skeleton */}
+        <section className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Skeleton className="h-10 w-32" />
+          <Skeleton className="h-10 w-28" />
+          <Skeleton className="h-10 w-32" />
+        </section>
+      </SkeletonPageLayout>
+    );
   }
 
   if (loadingState === "error") {

@@ -14,8 +14,12 @@ import {
 import { NotificationHeader } from "./components/NotificationHeader";
 import { NotificationFilters } from "./components/NotificationFilters";
 import { NotificationItem } from "./components/NotificationItem";
-import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { ErrorState } from "@/components/common/ErrorState";
+import {
+  SkeletonPageLayout,
+  SkeletonFilters,
+  SkeletonNotificationItem
+} from "@/components/common/SkeletonComponents";
 import {
   matchesReadFilter,
   matchesCategoryFilter,
@@ -143,7 +147,26 @@ export default function NotificationsPage() {
 
   // 로딩 상태
   if (loading) {
-    return <LoadingSpinner message="알림을 불러오는 중..." />;
+    return (
+      <SkeletonPageLayout
+        title="알림 센터"
+        description="시스템 알림 및 메시지 관리"
+      >
+        {/* Filters Skeleton */}
+        <section>
+          <SkeletonFilters />
+        </section>
+
+        {/* Notifications List Skeleton */}
+        <section>
+          <div className="space-y-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <SkeletonNotificationItem key={i} />
+            ))}
+          </div>
+        </section>
+      </SkeletonPageLayout>
+    );
   }
 
   // 에러 상태

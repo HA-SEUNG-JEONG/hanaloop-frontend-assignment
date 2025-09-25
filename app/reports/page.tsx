@@ -12,6 +12,15 @@ import {
 import { ReportsPageHeader } from "./components/ReportsPageHeader";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { ErrorState } from "@/components/common/ErrorState";
+import {
+  SkeletonPageLayout,
+  SkeletonStatsCard,
+  SkeletonCard,
+  SkeletonTable,
+  SkeletonChart,
+  SkeletonList
+} from "@/components/common/SkeletonComponents";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ReportsStatsCards } from "./components/ReportsStatsCards";
 import { ReportsChartsSection } from "./components/ReportsChartsSection";
 import { CompaniesTable } from "./components/CompaniesTable";
@@ -101,7 +110,44 @@ export default function ReportsPage() {
   };
 
   if (loading) {
-    return <LoadingSpinner />;
+    return (
+      <SkeletonPageLayout
+        title="보고서 관리"
+        description="기업별 배출량 보고서 및 데이터 관리"
+      >
+        {/* Stats Cards Skeleton */}
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <SkeletonStatsCard />
+          <SkeletonStatsCard />
+          <SkeletonStatsCard />
+          <SkeletonStatsCard />
+        </section>
+
+        {/* Charts Section Skeleton */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <SkeletonChart />
+          <SkeletonChart />
+        </section>
+
+        {/* Companies Table Skeleton */}
+        <section>
+          <SkeletonTable rows={8} />
+        </section>
+
+        {/* Reports List Skeleton */}
+        <section>
+          <SkeletonCard>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Skeleton className="h-6 w-40" />
+                <Skeleton className="h-3 w-48" />
+              </div>
+              <SkeletonList items={5} />
+            </div>
+          </SkeletonCard>
+        </section>
+      </SkeletonPageLayout>
+    );
   }
 
   if (error) {
