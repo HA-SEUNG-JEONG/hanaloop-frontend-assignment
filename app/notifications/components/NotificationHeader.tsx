@@ -24,22 +24,32 @@ export function NotificationHeader({
 }: NotificationHeaderProps) {
   return (
     <div className="border-b bg-card">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold tracking-tight mb-2">알림</h1>
-            <p className="text-xl text-muted-foreground">
+      <div className="container mx-auto px-4 py-6 sm:py-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex-1">
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-2">
+              알림
+            </h1>
+            <p className="text-lg sm:text-xl text-muted-foreground">
               시스템 알림 및 중요 메시지를 확인하세요
             </p>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
             {unreadCount > 0 && (
-              <Badge variant="destructive" className="text-sm">
+              <Badge
+                variant="destructive"
+                className="text-sm self-start sm:self-auto"
+              >
                 {unreadCount}개 읽지 않음
               </Badge>
             )}
             {unreadCount > 0 && (
-              <Button onClick={onMarkAllAsRead} variant="outline" size="sm">
+              <Button
+                onClick={onMarkAllAsRead}
+                variant="outline"
+                size="sm"
+                className="w-full sm:w-auto"
+              >
                 <CheckCheck className="mr-2 h-4 w-4" />
                 모두 읽음
               </Button>

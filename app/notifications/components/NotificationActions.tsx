@@ -21,29 +21,36 @@ export const NotificationActions = ({
   onDelete,
   isDeleting
 }: NotificationActionsProps) => (
-  <div className="flex items-center space-x-2 ml-4">
+  <div className="flex items-center justify-end sm:justify-start space-x-2">
     {!notification.isRead && (
       <Button
         variant="outline"
         size="sm"
         onClick={onMarkAsRead}
-        className={cn("text-xs", getButtonHoverClass("read"))}
+        className={cn(
+          "text-xs min-w-0 flex-1 sm:flex-none",
+          getButtonHoverClass("read")
+        )}
         aria-label={`${notification.title} 읽음 처리`}
       >
-        <Check className="mr-1 h-3 w-3" aria-hidden="true" />
-        읽음
+        <Check className="mr-1 h-3 w-3 sm:mr-1" aria-hidden="true" />
+        <span className="hidden sm:inline">읽음</span>
       </Button>
     )}
     <Button
       variant="outline"
       size="sm"
       onClick={onDelete}
-      className={cn(getButtonHoverClass("delete"), isDeleting && "opacity-50")}
+      className={cn(
+        "min-w-0 flex-1 sm:flex-none",
+        getButtonHoverClass("delete"),
+        isDeleting && "opacity-50"
+      )}
       aria-label={`${notification.title} 삭제`}
       disabled={isDeleting}
     >
-      <Trash2 className="mr-1 h-3 w-3" aria-hidden="true" />
-      삭제
+      <Trash2 className="mr-1 h-3 w-3 sm:mr-1" aria-hidden="true" />
+      <span className="hidden sm:inline">삭제</span>
     </Button>
   </div>
 );

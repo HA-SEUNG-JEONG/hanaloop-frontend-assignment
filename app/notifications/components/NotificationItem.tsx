@@ -57,10 +57,10 @@ export const NotificationItem = memo(function NotificationItem({
       aria-labelledby={`notification-title-${notification.id}`}
       aria-describedby={`notification-message-${notification.id}`}
     >
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between">
-          <div className="flex items-start space-x-4 flex-1">
-            <div className="mt-1">
+      <CardContent className="p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div className="flex items-start space-x-3 sm:space-x-4 flex-1 min-w-0">
+            <div className="mt-1 flex-shrink-0">
               <div
                 className={cn(
                   "transition-all duration-300 group-hover:scale-110",
@@ -71,15 +71,19 @@ export const NotificationItem = memo(function NotificationItem({
               </div>
             </div>
 
-            <NotificationContent notification={notification} />
+            <div className="flex-1 min-w-0">
+              <NotificationContent notification={notification} />
+            </div>
           </div>
 
-          <NotificationActions
-            notification={notification}
-            onMarkAsRead={handleMarkAsRead}
-            onDelete={handleDelete}
-            isDeleting={isDeleting}
-          />
+          <div className="flex-shrink-0">
+            <NotificationActions
+              notification={notification}
+              onMarkAsRead={handleMarkAsRead}
+              onDelete={handleDelete}
+              isDeleting={isDeleting}
+            />
+          </div>
         </div>
       </CardContent>
     </Card>

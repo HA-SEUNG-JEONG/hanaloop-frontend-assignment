@@ -186,7 +186,7 @@ export default function NotificationsPage() {
         onMarkAllAsRead={markAllAsRead}
       />
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6 sm:py-8">
         <NotificationFilters
           filter={filter}
           categoryFilter={categoryFilter}
@@ -196,7 +196,7 @@ export default function NotificationsPage() {
           onSearchTermChange={setSearchTerm}
         />
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {filteredNotifications.length > 0 ? (
             filteredNotifications.map((notification) => (
               <NotificationItem
@@ -207,8 +207,8 @@ export default function NotificationsPage() {
               />
             ))
           ) : (
-            <div className="text-center py-12">
-              <div className="text-muted-foreground">
+            <div className="text-center py-8 sm:py-12">
+              <div className="text-muted-foreground text-sm sm:text-base">
                 {hasActiveFilters
                   ? "검색 조건에 맞는 알림이 없습니다."
                   : "새로운 알림이 없습니다."}

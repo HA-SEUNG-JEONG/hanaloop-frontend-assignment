@@ -41,9 +41,9 @@ export function NotificationFilters({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="space-y-4">
           {/* 검색 */}
-          <div className="relative flex-1">
+          <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input
               type="text"
@@ -54,47 +54,55 @@ export function NotificationFilters({
             />
           </div>
 
-          {/* 읽음 상태 필터 */}
-          <div className="flex gap-2">
-            <Button
-              variant={filter === "all" ? "default" : "outline"}
-              size="sm"
-              onClick={() => onFilterChange("all")}
-            >
-              전체
-            </Button>
-            <Button
-              variant={filter === "unread" ? "default" : "outline"}
-              size="sm"
-              onClick={() => onFilterChange("unread")}
-            >
-              읽지 않음
-            </Button>
-            <Button
-              variant={filter === "read" ? "default" : "outline"}
-              size="sm"
-              onClick={() => onFilterChange("read")}
-            >
-              읽음
-            </Button>
-          </div>
+          {/* 필터 섹션 */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            {/* 읽음 상태 필터 */}
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant={filter === "all" ? "default" : "outline"}
+                size="sm"
+                onClick={() => onFilterChange("all")}
+                className="flex-1 sm:flex-none"
+              >
+                전체
+              </Button>
+              <Button
+                variant={filter === "unread" ? "default" : "outline"}
+                size="sm"
+                onClick={() => onFilterChange("unread")}
+                className="flex-1 sm:flex-none"
+              >
+                읽지 않음
+              </Button>
+              <Button
+                variant={filter === "read" ? "default" : "outline"}
+                size="sm"
+                onClick={() => onFilterChange("read")}
+                className="flex-1 sm:flex-none"
+              >
+                읽음
+              </Button>
+            </div>
 
-          {/* 카테고리 필터 */}
-          <select
-            value={categoryFilter}
-            onChange={(e) =>
-              onCategoryFilterChange(
-                e.target.value as NotificationCategory | "all"
-              )
-            }
-            className="px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-          >
-            <option value="all">모든 카테고리</option>
-            <option value="emission">배출량</option>
-            <option value="report">보고서</option>
-            <option value="system">시스템</option>
-            <option value="company">기업</option>
-          </select>
+            {/* 카테고리 필터 */}
+            <div className="flex-1 sm:max-w-xs">
+              <select
+                value={categoryFilter}
+                onChange={(e) =>
+                  onCategoryFilterChange(
+                    e.target.value as NotificationCategory | "all"
+                  )
+                }
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              >
+                <option value="all">모든 카테고리</option>
+                <option value="emission">배출량</option>
+                <option value="report">보고서</option>
+                <option value="system">시스템</option>
+                <option value="company">기업</option>
+              </select>
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
