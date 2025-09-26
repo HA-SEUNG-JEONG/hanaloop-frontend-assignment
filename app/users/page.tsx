@@ -211,10 +211,14 @@ export default function UsersPage() {
         {/* 사용자 목록 */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>사용자 목록</CardTitle>
-                <CardDescription>등록된 모든 사용자 계정</CardDescription>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                <CardTitle className="text-lg sm:text-xl">
+                  사용자 목록
+                </CardTitle>
+                <CardDescription className="text-sm sm:text-base">
+                  등록된 모든 사용자 계정
+                </CardDescription>
               </div>
             </div>
           </CardHeader>

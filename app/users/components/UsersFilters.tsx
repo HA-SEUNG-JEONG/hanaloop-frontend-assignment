@@ -59,63 +59,72 @@ export function UsersFilters({
     filter.country !== "all";
 
   return (
-    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+    <div className="space-y-4">
       {/* 검색 */}
-      <div className="relative flex-1 min-w-64">
-        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input
           type="text"
           placeholder="사용자 검색..."
           value={filter.search}
           onChange={(e) => handleSearchChange(e.target.value)}
-          className="pl-8 pr-4 py-2 border rounded-md text-sm w-full"
+          className="pl-10 pr-4 py-2 border rounded-md text-sm w-full"
         />
       </div>
 
       {/* 필터 옵션들 */}
-      <div className="flex flex-wrap gap-2">
-        {/* 역할 필터 */}
-        <select
-          value={filter.role}
-          onChange={(e) => handleRoleChange(e.target.value as UserRole | "all")}
-          className="px-3 py-2 border rounded-md text-sm"
-        >
-          <option value="all">모든 역할</option>
-          <option value="관리자">관리자</option>
-          <option value="감사자">감사자</option>
-          <option value="사용자">사용자</option>
-        </select>
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-wrap gap-2 flex-1">
+          {/* 역할 필터 */}
+          <select
+            value={filter.role}
+            onChange={(e) =>
+              handleRoleChange(e.target.value as UserRole | "all")
+            }
+            className="px-3 py-2 border rounded-md text-sm min-w-[120px]"
+          >
+            <option value="all">모든 역할</option>
+            <option value="관리자">관리자</option>
+            <option value="감사자">감사자</option>
+            <option value="사용자">사용자</option>
+          </select>
 
-        {/* 상태 필터 */}
-        <select
-          value={filter.status}
-          onChange={(e) =>
-            handleStatusChange(e.target.value as UserStatus | "all")
-          }
-          className="px-3 py-2 border rounded-md text-sm"
-        >
-          <option value="all">모든 상태</option>
-          <option value="활성">활성</option>
-          <option value="비활성">비활성</option>
-        </select>
+          {/* 상태 필터 */}
+          <select
+            value={filter.status}
+            onChange={(e) =>
+              handleStatusChange(e.target.value as UserStatus | "all")
+            }
+            className="px-3 py-2 border rounded-md text-sm min-w-[120px]"
+          >
+            <option value="all">모든 상태</option>
+            <option value="활성">활성</option>
+            <option value="비활성">비활성</option>
+          </select>
 
-        {/* 국가 필터 */}
-        <select
-          value={filter.country}
-          onChange={(e) => handleCountryChange(e.target.value)}
-          className="px-3 py-2 border rounded-md text-sm"
-        >
-          <option value="all">모든 국가</option>
-          {availableCountries.map((country) => (
-            <option key={country} value={country}>
-              {country}
-            </option>
-          ))}
-        </select>
+          {/* 국가 필터 */}
+          <select
+            value={filter.country}
+            onChange={(e) => handleCountryChange(e.target.value)}
+            className="px-3 py-2 border rounded-md text-sm min-w-[120px]"
+          >
+            <option value="all">모든 국가</option>
+            {availableCountries.map((country) => (
+              <option key={country} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {/* 필터 초기화 */}
         {hasActiveFilters && (
-          <Button variant="outline" size="sm" onClick={clearFilters}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={clearFilters}
+            className="w-full sm:w-auto flex-shrink-0"
+          >
             필터 초기화
           </Button>
         )}

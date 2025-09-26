@@ -115,25 +115,41 @@ export function PageHeader({
   return (
     <div className={cn("border-b bg-card", className)}>
       <div className="container mx-auto px-4 py-6">
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex-1 min-w-0">
             {showBackButton && (
               <div className="flex items-center space-x-4 mb-2">
                 <Link href="/">
-                  <Button variant="ghost" size="sm">
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    대시보드로 돌아가기
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs sm:text-sm"
+                  >
+                    <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <span className="hidden xs:inline">
+                      대시보드로 돌아가기
+                    </span>
+                    <span className="xs:hidden">돌아가기</span>
                   </Button>
                 </Link>
               </div>
             )}
-            <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-            <p className="text-muted-foreground">{description}</p>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">
+              {title}
+            </h1>
+            <p className="text-sm sm:text-base text-muted-foreground">
+              {description}
+            </p>
           </div>
           {showActionButton && (
-            <Button onClick={onActionClick}>
+            <Button
+              onClick={onActionClick}
+              className="w-full sm:w-auto flex-shrink-0"
+            >
               {defaultIcon}
-              <span className="ml-2">{actionButtonText}</span>
+              <span className="ml-2 text-sm sm:text-base">
+                {actionButtonText}
+              </span>
             </Button>
           )}
         </div>
