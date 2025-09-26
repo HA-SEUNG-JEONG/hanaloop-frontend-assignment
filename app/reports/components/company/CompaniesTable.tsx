@@ -90,15 +90,21 @@ export function CompaniesTable({
     <>
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>기업별 배출량 상세</CardTitle>
-              <CardDescription>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <CardTitle className="text-lg sm:text-xl">
+                기업별 배출량 상세
+              </CardTitle>
+              <CardDescription className="text-sm sm:text-base">
                 각 기업의 배출량 데이터 및 변화율
               </CardDescription>
             </div>
-            <Button onClick={() => setIsCreateModalOpen(true)}>
-              <Plus className="h-4 w-4 mr-2" />새 회사 추가
+            <Button
+              onClick={() => setIsCreateModalOpen(true)}
+              className="w-full sm:w-auto flex-shrink-0"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              <span className="text-sm sm:text-base">새 회사 추가</span>
             </Button>
           </div>
         </CardHeader>
@@ -111,10 +117,10 @@ export function CompaniesTable({
                     기업명
                   </TableHead>
                   <TableHead className="w-[60px] sm:w-[80px]">국가</TableHead>
-                  <TableHead className="hidden md:table-cell w-[100px]">
+                  <TableHead className="hidden sm:table-cell">
                     산업분야
                   </TableHead>
-                  <TableHead className="hidden lg:table-cell w-[80px]">
+                  <TableHead className="hidden lg:table-cell">
                     계열사 수
                   </TableHead>
                   <TableHead className="w-[100px] sm:w-[120px]">
@@ -172,24 +178,24 @@ export function CompaniesTable({
                       <EmissionsBadge change={company.change} />
                     </TableCell>
                     <TableCell>
-                      <div className="flex flex-col sm:flex-row space-y-1 sm:space-y-0 sm:space-x-2">
+                      <div className="flex flex-col gap-1 sm:flex-row sm:gap-2">
                         <Button
                           variant="outline"
                           size="sm"
-                          className="text-xs"
+                          className="text-xs w-full sm:w-auto"
                           onClick={() => handleViewDetails(company.id)}
                         >
                           <Eye className="h-3 w-3 mr-1" />
-                          상세보기
+                          <span className="hidden xs:inline">상세보기</span>
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="text-xs"
+                          className="text-xs w-full sm:w-auto"
                           onClick={() => handleEditEmissions(company.id)}
                         >
                           <Edit className="h-3 w-3 mr-1" />
-                          배출량 편집
+                          <span className="hidden xs:inline">배출량 편집</span>
                         </Button>
                       </div>
                     </TableCell>

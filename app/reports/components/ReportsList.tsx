@@ -144,17 +144,31 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
       <>
         <Card>
           <CardHeader>
-            <CardTitle>제출된 보고서</CardTitle>
-            <CardDescription>기업에서 제출한 지속가능성 보고서</CardDescription>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex-1 min-w-0">
+                <CardTitle className="text-lg sm:text-xl">
+                  제출된 보고서
+                </CardTitle>
+                <CardDescription className="text-sm sm:text-base">
+                  기업에서 제출한 지속가능성 보고서
+                </CardDescription>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-center py-8">
-              <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground mb-4">
+            <div className="text-center py-8 sm:py-12">
+              <FileText className="h-12 w-12 sm:h-16 sm:w-16 text-muted-foreground mx-auto mb-4" />
+              <p className="text-muted-foreground mb-4 text-sm sm:text-base">
                 아직 제출된 보고서가 없습니다.
               </p>
-              <Button onClick={() => setIsCreateModalOpen(true)}>
-                <Plus className="h-4 w-4 mr-2" />첫 번째 보고서 작성하기
+              <Button
+                onClick={() => setIsCreateModalOpen(true)}
+                className="w-full sm:w-auto"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                <span className="text-sm sm:text-base">
+                  첫 번째 보고서 작성하기
+                </span>
               </Button>
             </div>
           </CardContent>
@@ -174,15 +188,21 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
     <>
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>제출된 보고서</CardTitle>
-              <CardDescription>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <CardTitle className="text-lg sm:text-xl">
+                제출된 보고서
+              </CardTitle>
+              <CardDescription className="text-sm sm:text-base">
                 기업에서 제출한 지속가능성 보고서
               </CardDescription>
             </div>
-            <Button onClick={() => setIsCreateModalOpen(true)}>
-              <Plus className="h-4 w-4 mr-2" />새 보고서 작성
+            <Button
+              onClick={() => setIsCreateModalOpen(true)}
+              className="w-full sm:w-auto flex-shrink-0"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              <span className="text-sm sm:text-base">새 보고서 작성</span>
             </Button>
           </div>
 
@@ -194,7 +214,7 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
                 placeholder="보고서 제목이나 내용으로 검색..."
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="pl-10"
+                className="pl-10 w-full"
                 disabled={isSearching}
               />
             </div>
@@ -217,65 +237,80 @@ export function ReportsList({ posts, companies, onRefresh }: ReportsListProps) {
                 return (
                   <div
                     key={post.id}
-                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors gap-4"
                   >
-                    <div className="flex items-center space-x-4">
-                      <div className="p-2 bg-primary/10 rounded-lg">
+                    <div className="flex items-start sm:items-center space-x-4 flex-1 min-w-0">
+                      <div className="p-2 bg-primary/10 rounded-lg flex-shrink-0">
                         <FileText className="h-5 w-5 text-primary" />
                       </div>
-                      <div className="flex-1">
-                        <h4 className="font-medium">{post.title}</h4>
-                        <p className="text-sm text-muted-foreground">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-sm sm:text-base truncate">
+                          {post.title}
+                        </h4>
+                        <p className="text-xs sm:text-sm text-muted-foreground">
                           {company?.name} •{" "}
                           {new Date(post.dateTime).toLocaleDateString("ko-KR")}
                         </p>
-                        <p className="text-sm mt-1 line-clamp-2">
+                        <p className="text-xs sm:text-sm mt-1 line-clamp-2 text-muted-foreground">
                           {post.content}
                         </p>
                       </div>
                     </div>
-                    <div className="flex space-x-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleViewReport(post)}
-                      >
-                        <Eye className="h-4 w-4 mr-1" />
-                        보기
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEditReport(post)}
-                      >
-                        <Edit className="h-4 w-4 mr-1" />
-                        편집
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDownloadPDF(post)}
-                      >
-                        <Download className="h-4 w-4 mr-1" />
-                        PDF
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDownloadText(post)}
-                      >
-                        <Download className="h-4 w-4 mr-1" />
-                        TXT
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDeleteReport(post.id)}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                      >
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        삭제
-                      </Button>
+
+                    {/* 데스크톱: 가로 배치, 모바일: 세로 배치 */}
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-2 w-full sm:w-auto">
+                      {/* 주요 액션 버튼들 */}
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleViewReport(post)}
+                          className="flex-1 sm:flex-none text-xs"
+                        >
+                          <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                          <span className="hidden xs:inline">보기</span>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEditReport(post)}
+                          className="flex-1 sm:flex-none text-xs"
+                        >
+                          <Edit className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                          <span className="hidden xs:inline">편집</span>
+                        </Button>
+                      </div>
+
+                      {/* 다운로드 및 삭제 버튼들 */}
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDownloadPDF(post)}
+                          className="flex-1 sm:flex-none text-xs"
+                        >
+                          <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                          PDF
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDownloadText(post)}
+                          className="flex-1 sm:flex-none text-xs"
+                        >
+                          <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                          TXT
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteReport(post.id)}
+                          className="flex-1 sm:flex-none text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                          <span className="hidden xs:inline">삭제</span>
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 );
